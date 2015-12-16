@@ -48,11 +48,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Game.cs" />
+    <Compile Include="Core\IListener.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="Managers\ModelsManager.cs" />
+    <Compile Include="Managers\SceneManager.cs" />
+    <Compile Include="Managers\ShaderManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\IGameObject.cs" />
+    <Compile Include="Rendering\Model.cs" />
+    <Compile Include="Rendering\Triangle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Shaders\fragment.glsl" />
+    <None Include="Shaders\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
