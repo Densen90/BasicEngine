@@ -8,7 +8,5 @@ namespace BasicEngine.Rendering
         void Draw();
         void Update();
         void SetProgram(int program);
-        int GetVertexArrayObject();
-        List<int> GetVertexbufferObjects();
     }
 }

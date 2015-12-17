@@ -14,9 +14,10 @@ namespace BasicEngine.Managers
 
             //set up our triangle object
             //Models::Triangle* triangle = new Models::Triangle;
-           // triangle->SetProgram(Shader_Manager::GetShader("colorShader"));
+            // triangle->SetProgram(Shader_Manager::GetShader("colorShader"));
             //triangle->Create();
             //gameModelList["triangle"] = triangle;
+            Model teapot = new Model(new Mesh(@"C:\Projects\OpenGL\basic_engine_git\BasicEngine\BasicEngine\ModelFiles\teapot.obj"));
         }
 
         public void Dispose()

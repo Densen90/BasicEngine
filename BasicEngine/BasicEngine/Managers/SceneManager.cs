@@ -14,7 +14,7 @@ namespace BasicEngine.Managers
         {
             shaderManager = new ShaderManager();
             //TODO: FileService Class which handles the Files, not in ShaderManager, give source code to shader manager
-            shaderManager.CreateProgram("test", @"H:\OpenGL\basic_engine_git\BasicEngine\BasicEngine\Shaders\vertex.glsl", @"H:\OpenGL\basic_engine_git\BasicEngine\BasicEngine\Shaders\fragment.glsl");
+            shaderManager.CreateProgram("test", @"C:\Projects\OpenGL\basic_engine_git\BasicEngine\BasicEngine\Shaders\vertex.glsl", @"C:\Projects\OpenGL\basic_engine_git\BasicEngine\BasicEngine\Shaders\fragment.glsl");
 
             modelsManager = new ModelsManager();
         }

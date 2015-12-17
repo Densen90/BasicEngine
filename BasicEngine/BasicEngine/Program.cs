@@ -12,6 +12,7 @@
 
 using System;
 using BasicEngine;
+using BasicEngine.Managers;
 
 namespace StarterKit
 {
@@ -23,8 +24,9 @@ namespace StarterKit
             // The 'using' idiom guarantees proper resource cleanup.
             // We request 30 UpdateFrame events per second, and unlimited
             // RenderFrame events (as fast as the computer can handle).
-            using (Game game = new Game())
+            using (BasicEngine.Core.Game game = new BasicEngine.Core.Game())
             {
+                game.SetListener(new SceneManager());
                 game.Run();
             }
         }

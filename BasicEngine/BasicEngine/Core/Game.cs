@@ -24,7 +24,7 @@ namespace BasicEngine.Core
         {
             base.OnResize(e);
 
-            if(listener!=null)
+            if (listener != null)
             {
                 listener.NotifyReshape();
             }
@@ -43,7 +43,10 @@ namespace BasicEngine.Core
         protected override void Dispose(bool manual)
         {
             base.Dispose(manual);
-            listener.Dispose();
+            if (listener != null)
+            {
+                listener.Dispose();
+            }
         }
 
         public void SetListener(IListener listener)
