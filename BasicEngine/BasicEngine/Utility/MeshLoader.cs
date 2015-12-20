@@ -50,6 +50,7 @@ namespace BasicEngine.Utility
             {
                 line = line.Trim(splitCharacters);
                 line = line.Replace("  ", " ");
+                line = line.Replace(".", ",");
 
                 string[] parameters = line.Split(splitCharacters);
 

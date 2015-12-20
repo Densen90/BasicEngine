@@ -7,7 +7,7 @@ namespace BasicEngine.Managers
 {
     class ShaderManager : IDisposable
     {
-        private Dictionary<string, int> programDic = null;  //same dictionary for all Instances
+        private static Dictionary<string, int> programDic = null;  //same dictionary for all Instances
 
         public ShaderManager()
         {
@@ -67,7 +67,7 @@ namespace BasicEngine.Managers
         /// </summary>
         /// <param name="shaderName">name of the shader</param>
         /// <returns>id of shader program</returns>
-        public int GetShader(string shaderName)
+        public static int GetShader(string shaderName)
         {
             if(!programDic.ContainsKey(shaderName))
             {

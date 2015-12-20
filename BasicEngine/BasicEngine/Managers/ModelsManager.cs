@@ -18,6 +18,7 @@ namespace BasicEngine.Managers
             //triangle->Create();
             //gameModelList["triangle"] = triangle;
             Model teapot = new Model(new Mesh(@"C:\Projects\OpenGL\basic_engine_git\BasicEngine\BasicEngine\ModelFiles\teapot.obj"));
+            gameModelDic.Add("teapot", teapot);
         }
 
         public void Dispose()

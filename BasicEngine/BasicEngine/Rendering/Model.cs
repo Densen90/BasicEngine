@@ -14,7 +14,6 @@ namespace BasicEngine.Rendering
         public Model(Mesh mesh)
         {
             this.mesh = mesh;
-            mesh.Prepare();
         }
 
         public void Dispose()
