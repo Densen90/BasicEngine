@@ -69,135 +69,142 @@ namespace BasicEngine.Rendering
         public Mesh(string fileName)
         {
             //TODO: FileService
-            if (MeshLoader.Load(this, fileName))
-            {
-                Console.WriteLine("Mesh.Mesh: Created Mesh with: ");
-                Console.WriteLine("\t" + vertices.Length + " Vertices");
-                Console.WriteLine("\t" + triangles.Length + " Triangles");
-                Console.WriteLine("\t" + quads.Length + " Quads");
-            }
-            else
-            {
-                Console.WriteLine("Mesh.Mesh: Model file " + fileName + " does not exist");
-            }
+            //if (MeshLoader.Load(this, fileName))
+            //{
+            //    Console.WriteLine("Mesh.Mesh: Created Mesh with: ");
+            //    Console.WriteLine("\t" + vertices.Length + " Vertices");
+            //    Console.WriteLine("\t" + triangles.Length + " Triangles");
+            //    Console.WriteLine("\t" + quads.Length + " Quads");
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Mesh.Mesh: Model file " + fileName + " does not exist");
+            //}
 
             Init();
 
         }
 
+        int vertexArrayID;
+        int vertexBuffer;
+
         public void Init()
         {
+            GL.GenVertexArrays(1, out vertexArrayID);
+            GL.BindVertexArray(vertexArrayID);
+
+            //TODO: making static class?
             BasicEngine.Managers.ShaderManager man = new BasicEngine.Managers.ShaderManager();
-            man.CreateProgram("test", @"C:\Projects\OpenGL\basic_engine_git\BasicEngine\BasicEngine\Shaders\vertex.glsl", @"C:\Projects\OpenGL\basic_engine_git\BasicEngine\BasicEngine\Shaders\fragment.glsl");
-            shaderProgram = BasicEngine.Managers.ShaderManager.GetShader("test");
+            man.CreateProgram("test2", @"..\..\Shaders\vertex2.glsl", @"..\..\Shaders\fragment2.glsl");
+            shaderProgram = BasicEngine.Managers.ShaderManager.GetShader("test2");
 
-            attrVertexPos = GL.GetAttribLocation(shaderProgram, "vPosition");
-            attrVertexNorm = GL.GetAttribLocation(shaderProgram, "nPosition");
-            uniformMView = GL.GetUniformLocation(shaderProgram, "modelview");
-
-            if (attrVertexPos == -1 || uniformMView == -1 || attrVertexNorm == -1)
-            {
-                Console.WriteLine("UAUAUAUA: Error binding attributes");
-            }
-
-            GL.GenBuffers(1, out vbo_position);
-            GL.GenBuffers(1, out vbo_Norm);
-            GL.GenBuffers(1, out vbo_mview);
-
-            mviewdata = new Matrix4[]{
-                Matrix4.Identity
+            //our triangle vertices
+            Vector3[] g_vertex_buffer_data = new Vector3[]{
+                new Vector3(-1.0f, -1.0f, 0.0f),
+                new Vector3(1.0f, -1.0f, 0.0f),
+                new Vector3(0.0f,  1.0f, 0.0f),
             };
 
-            vecPosDat = new Vector3[vertices.Length];
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                vecPosDat[i] = new Vector3(vertices[i].Vertex.X / 80f, vertices[i].Vertex.Y / 80f, 0.0f);
-                //Console.WriteLine("Setting Vector: " + vecPosDat[i]);
-            }
+            //gernerate 1 buffer, put resulting identifier in vertexBuffer
+            GL.GenBuffers(1, out vertexBuffer);
+            //The following command will talk about our 'vertexBuffer' buffer
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+            //Give the vertices to OpenGL
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(g_vertex_buffer_data.Length * Vector3.SizeInBytes), g_vertex_buffer_data, BufferUsageHint.StaticDraw);
 
-            nPosDat = new Vector3[vertices.Length];
-            for (int i = 0; i < vertices.Length; i++) nPosDat[i] = vertices[i].Normal;
+
+            //BasicEngine.Managers.ShaderManager man = new BasicEngine.Managers.ShaderManager();
+            //man.CreateProgram("test", @"..\..\Shaders\vertex.glsl", @"..\..\Shaders\fragment.glsl");
+            //shaderProgram = BasicEngine.Managers.ShaderManager.GetShader("test");
+
+            //attrVertexPos = GL.GetAttribLocation(shaderProgram, "vPosition");
+            //attrVertexNorm = GL.GetAttribLocation(shaderProgram, "nPosition");
+            //uniformMView = GL.GetUniformLocation(shaderProgram, "modelview");
+
+            //if (attrVertexPos == -1 || uniformMView == -1 || attrVertexNorm == -1)
+            //{
+            //    Console.WriteLine("UAUAUAUA: Error binding attributes");
+            //}
+
+            //GL.GenBuffers(1, out vbo_position);
+            //GL.GenBuffers(1, out vbo_Norm);
+            //GL.GenBuffers(1, out vbo_mview);
+
+            //mviewdata = new Matrix4[]{
+            //    Matrix4.Identity
+            //};
+
+            //vecPosDat = new Vector3[vertices.Length];
+            //for (int i = 0; i < vertices.Length; i++)
+            //{
+            //    vecPosDat[i] = new Vector3(vertices[i].Vertex.X / 80f, vertices[i].Vertex.Y / 80f, 0.0f);
+            //}
+
+            //nPosDat = new Vector3[vertices.Length];
+            //for (int i = 0; i < vertices.Length; i++) nPosDat[i] = vertices[i].Normal;
         }
 
         public void Prepare()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
-            GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vecPosDat.Length * Vector3.SizeInBytes), vecPosDat, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(attrVertexPos, 3, VertexAttribPointerType.Float, false, 0, 0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_Norm);
-            GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(nPosDat.Length * Vector3.SizeInBytes), nPosDat, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(attrVertexNorm, 3, VertexAttribPointerType.Float, true, 0, 0);
 
 
-            GL.UniformMatrix4(uniformMView, false, ref mviewdata[0]);
 
-            GL.UseProgram(shaderProgram);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            /*
-            if (verticesBufferId == 0)
-            {
-                GL.GenBuffers(1, out verticesBufferId);
-                GL.BindBuffer(BufferTarget.ArrayBuffer, verticesBufferId);
-                GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Marshal.SizeOf(typeof(VertexObj))), vertices, BufferUsageHint.StaticDraw);
-            }
+            //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
+            //GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vecPosDat.Length * Vector3.SizeInBytes), vecPosDat, BufferUsageHint.StaticDraw);
+            //GL.VertexAttribPointer(attrVertexPos, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            if (trianglesBufferId == 0)
-            {
-                GL.GenBuffers(1, out trianglesBufferId);
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, trianglesBufferId);
-                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(triangles.Length * Marshal.SizeOf(typeof(Triangle))), triangles, BufferUsageHint.StaticDraw);
-            }
+            //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_Norm);
+            //GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(nPosDat.Length * Vector3.SizeInBytes), nPosDat, BufferUsageHint.StaticDraw);
+            //GL.VertexAttribPointer(attrVertexNorm, 3, VertexAttribPointerType.Float, true, 0, 0);
 
-            if (quadsBufferId == 0)
-            {
-                GL.GenBuffers(1, out quadsBufferId);
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, quadsBufferId);
-                GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(quads.Length * Marshal.SizeOf(typeof(Quad))), quads, BufferUsageHint.StaticDraw);
-            }*/
 
+            //GL.UniformMatrix4(uniformMView, false, ref mviewdata[0]);
+
+            //GL.UseProgram(shaderProgram);
+            //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
         public void Render()
         {
-            Prepare();
-
+            //Clear the screen
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.Enable(EnableCap.DepthTest);
+
+            //Use the shader
+            GL.UseProgram(shaderProgram);
+
+            //1st attribute buffer: vertices
+            GL.EnableVertexAttribArray(0);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+            GL.VertexAttribPointer(
+                0,                              //attribute 0. No particular reason for 0, but must match the layout in the shader
+                3,                              //size
+                VertexAttribPointerType.Float,  //type
+                false,                          //not normalized
+                0,                              //stride
+                0                               //array buffer offset
+            );
+
+            //Draw the triangle
+            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);   //starting from vertex0; 3 vertices total -> 1 triangle
+            GL.DisableVertexAttribArray(0);
 
 
-            GL.EnableVertexAttribArray(attrVertexPos);
-            GL.EnableVertexAttribArray(attrVertexNorm);
+            //Prepare();
 
-            GL.DrawArrays(PrimitiveType.TriangleStrip, 0, vecPosDat.Length);
-
-            GL.DisableVertexAttribArray(attrVertexPos);
-            GL.EnableVertexAttribArray(attrVertexNorm);
+            //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            //GL.Enable(EnableCap.DepthTest);
 
 
-            GL.Flush();
+            //GL.EnableVertexAttribArray(attrVertexPos);
+            //GL.EnableVertexAttribArray(attrVertexNorm);
 
-            /*
+            //GL.DrawArrays(PrimitiveType.TriangleStrip, 0, vecPosDat.Length);
 
-            GL.PushClientAttrib(ClientAttribMask.ClientVertexArrayBit);
-            GL.EnableClientState(ArrayCap.VertexArray);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, verticesBufferId);
-            GL.InterleavedArrays(InterleavedArrayFormat.T2fN3fV3f, Marshal.SizeOf(typeof(VertexObj)), IntPtr.Zero);
+            //GL.DisableVertexAttribArray(attrVertexPos);
+            //GL.EnableVertexAttribArray(attrVertexNorm);
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, trianglesBufferId);
-            //GL.DrawElements(BeginMode.Triangles, triangles.Length * 3, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            GL.DrawElements(PrimitiveType.Triangles, triangles.Length * 3, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
-            if (quads.Length > 0)
-            {
-                GL.BindBuffer(BufferTarget.ElementArrayBuffer, quadsBufferId);
-                //GL.DrawElements(BeginMode.Quads, quads.Length * 4, DrawElementsType.UnsignedInt, IntPtr.Zero);
-                GL.DrawElements(PrimitiveType.Quads, quads.Length * 4, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            }
-
-            GL.PopClientAttrib();
-            */
-
+            //GL.Flush();
         }
     }
 }

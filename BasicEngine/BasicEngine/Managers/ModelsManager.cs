@@ -17,7 +17,7 @@ namespace BasicEngine.Managers
             // triangle->SetProgram(Shader_Manager::GetShader("colorShader"));
             //triangle->Create();
             //gameModelList["triangle"] = triangle;
-            Model teapot = new Model(new Mesh(@"C:\Projects\OpenGL\basic_engine_git\BasicEngine\BasicEngine\ModelFiles\teapot.obj"));
+            Model teapot = new Model(new Mesh(@"..\..\ModelFiles\teapot.obj"));
             gameModelDic.Add("teapot", teapot);
         }
 

@@ -64,7 +64,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="ModelFiles\teapot.obj" />
+    <None Include="Shaders\fragment2.glsl" />
     <None Include="Shaders\fragment.glsl" />
+    <None Include="Shaders\vertex2.glsl" />
     <None Include="Shaders\vertex.glsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
