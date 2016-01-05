@@ -87,6 +87,8 @@ namespace BasicEngine.Rendering
 
         int vertexArrayID;
         int vertexBuffer;
+        int matrixID;
+        Matrix4 MVP;
 
         public void Init()
         {
@@ -98,12 +100,26 @@ namespace BasicEngine.Rendering
             man.CreateProgram("test2", @"..\..\Shaders\vertex2.glsl", @"..\..\Shaders\fragment2.glsl");
             shaderProgram = BasicEngine.Managers.ShaderManager.GetShader("test2");
 
-            //our triangle vertices
+            //Creating our MVP Matrix --> TODO: Camera Class?
+            matrixID = GL.GetUniformLocation(shaderProgram, "mvpMatrix");   //Get the Handle for our uniform in our shader
+            //Creating the ProjectionMatrix for transformation from camera to homogenous space
+            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI/4f, 4f/3f, 0.1f, 10.0f);
+            //Create View Matrix for transformation from World to Camera Space
+            Matrix4 view = Matrix4.LookAt(
+                                    new Vector3(4, 2, 2), //Camera is at (4,3,3), in World Space
+                                    new Vector3(0, 0, 0), //looks at the origin
+                                    Vector3.UnitY);//Up Vector
+            //Model matrix : an identity matrix (model will be at the origin)
+            Matrix4 model = Matrix4.Identity;   //TODO: here TranslationMatrix*RotationMatrix*ScaleMatrix -> Identity no transformation
+            MVP = model * view * projection;
+
+            //our triangle vertices in modelSpace
             Vector3[] g_vertex_buffer_data = new Vector3[]{
                 new Vector3(-1.0f, -1.0f, 0.0f),
                 new Vector3(1.0f, -1.0f, 0.0f),
                 new Vector3(0.0f,  1.0f, 0.0f),
             };
+            short[] g_element_buffer_data = new short[] { 0, 1, 2 };
 
             //gernerate 1 buffer, put resulting identifier in vertexBuffer
             GL.GenBuffers(1, out vertexBuffer);
@@ -171,6 +187,10 @@ namespace BasicEngine.Rendering
 
             //Use the shader
             GL.UseProgram(shaderProgram);
+
+            //send the modelViewMatrix to our Shader as uniform
+            Matrix4 m = Matrix4.Identity;
+            GL.UniformMatrix4(matrixID, false, ref MVP);
 
             //1st attribute buffer: vertices
             GL.EnableVertexAttribArray(0);
