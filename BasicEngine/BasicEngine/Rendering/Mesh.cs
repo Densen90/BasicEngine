@@ -1,5 +1,4 @@
-﻿using BasicEngine.Utility;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Runtime.InteropServices;
@@ -85,10 +84,12 @@ namespace BasicEngine.Rendering
 
         }
 
-        int vertexArrayID;
-        int vertexBuffer;
+        int vertexArrayID;  //VAO
+        int vertexBuffer;   //VBO
+        int colorBuffer;    //VBO
         int matrixID;
         Matrix4 MVP;
+        Vector3[] g_vertex_buffer_data;
 
         public void Init()
         {
@@ -113,78 +114,106 @@ namespace BasicEngine.Rendering
             Matrix4 model = Matrix4.Identity;   //TODO: here TranslationMatrix*RotationMatrix*ScaleMatrix -> Identity no transformation
             MVP = model * view * projection;
 
-            //our triangle vertices in modelSpace
-            Vector3[] g_vertex_buffer_data = new Vector3[]{
-                new Vector3(-1.0f, -1.0f, 0.0f),
-                new Vector3(1.0f, -1.0f, 0.0f),
-                new Vector3(0.0f,  1.0f, 0.0f),
+            //our cube, 36 vertices for 12 triangles in modelSpace
+            g_vertex_buffer_data = new Vector3[]{
+                new Vector3(-1.0f,-1.0f,-1.0f),
+                new Vector3(-1.0f,-1.0f, 1.0f),
+                new Vector3(-1.0f, 1.0f, 1.0f),
+                new Vector3(1.0f, 1.0f,-1.0f),
+                new Vector3(-1.0f,-1.0f,-1.0f),
+                new Vector3(-1.0f, 1.0f,-1.0f),
+                new Vector3(1.0f,-1.0f, 1.0f),
+                new Vector3(-1.0f,-1.0f,-1.0f),
+                new Vector3(1.0f,-1.0f,-1.0f),
+                new Vector3(1.0f, 1.0f,-1.0f),
+                new Vector3(1.0f,-1.0f,-1.0f),
+                new Vector3(-1.0f,-1.0f,-1.0f),
+                new Vector3(-1.0f,-1.0f,-1.0f),
+                new Vector3(-1.0f, 1.0f, 1.0f),
+                new Vector3(-1.0f, 1.0f,-1.0f),
+                new Vector3(1.0f,-1.0f, 1.0f),
+                new Vector3(-1.0f,-1.0f, 1.0f),
+                new Vector3(-1.0f,-1.0f,-1.0f),
+                new Vector3(-1.0f, 1.0f, 1.0f),
+                new Vector3(-1.0f,-1.0f, 1.0f),
+                new Vector3(1.0f,-1.0f, 1.0f),
+                new Vector3(1.0f, 1.0f, 1.0f),
+                new Vector3(1.0f,-1.0f,-1.0f),
+                new Vector3(1.0f, 1.0f,-1.0f),
+                new Vector3(1.0f,-1.0f,-1.0f),
+                new Vector3(1.0f, 1.0f, 1.0f),
+                new Vector3(1.0f,-1.0f, 1.0f),
+                new Vector3(1.0f, 1.0f, 1.0f),
+                new Vector3(1.0f, 1.0f,-1.0f),
+                new Vector3(-1.0f, 1.0f,-1.0f),
+                new Vector3(1.0f, 1.0f, 1.0f),
+                new Vector3(-1.0f, 1.0f,-1.0f),
+                new Vector3(-1.0f, 1.0f, 1.0f),
+                new Vector3(1.0f, 1.0f, 1.0f),
+                new Vector3(-1.0f, 1.0f, 1.0f),
+                new Vector3(1.0f,-1.0f, 1.0f),
             };
-            short[] g_element_buffer_data = new short[] { 0, 1, 2 };
 
-            //gernerate 1 buffer, put resulting identifier in vertexBuffer
+            //color for each vertex of the cube
+            Vector3[] g_color_buffer_data = new Vector3[]{
+                new Vector3(0.583f,  0.771f,  0.014f),
+                new Vector3(0.609f,  0.115f,  0.436f),
+                new Vector3(0.327f,  0.483f,  0.844f),
+                new Vector3(0.822f,  0.569f,  0.201f),
+                new Vector3(0.435f,  0.602f,  0.223f),
+                new Vector3(0.310f,  0.747f,  0.185f),
+                new Vector3(0.597f,  0.770f,  0.761f),
+                new Vector3(0.559f,  0.436f,  0.730f),
+                new Vector3(0.359f,  0.583f,  0.152f),
+                new Vector3(0.483f,  0.596f,  0.789f),
+                new Vector3(0.559f,  0.861f,  0.639f),
+                new Vector3(0.195f,  0.548f,  0.859f),
+                new Vector3(0.014f,  0.184f,  0.576f),
+                new Vector3(0.771f,  0.328f,  0.970f),
+                new Vector3(0.406f,  0.615f,  0.116f),
+                new Vector3(0.676f,  0.977f,  0.133f),
+                new Vector3(0.971f,  0.572f,  0.833f),
+                new Vector3(0.140f,  0.616f,  0.489f),
+                new Vector3(0.997f,  0.513f,  0.064f),
+                new Vector3(0.945f,  0.719f,  0.592f),
+                new Vector3(0.543f,  0.021f,  0.978f),
+                new Vector3(0.279f,  0.317f,  0.505f),
+                new Vector3(0.167f,  0.620f,  0.077f),
+                new Vector3(0.347f,  0.857f,  0.137f),
+                new Vector3(0.055f,  0.953f,  0.042f),
+                new Vector3(0.714f,  0.505f,  0.345f),
+                new Vector3(0.783f,  0.290f,  0.734f),
+                new Vector3(0.722f,  0.645f,  0.174f),
+                new Vector3(0.302f,  0.455f,  0.848f),
+                new Vector3(0.225f,  0.587f,  0.040f),
+                new Vector3(0.517f,  0.713f,  0.338f),
+                new Vector3(0.053f,  0.959f,  0.120f),
+                new Vector3(0.393f,  0.621f,  0.362f),
+                new Vector3(0.673f,  0.211f,  0.457f),
+                new Vector3(0.820f,  0.883f,  0.371f),
+                new Vector3(0.982f,  0.099f,  0.879f),
+            };
+
+            //generate 1 buffer, put resulting identifier in vertexBuffer
             GL.GenBuffers(1, out vertexBuffer);
             //The following command will talk about our 'vertexBuffer' buffer
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
             //Give the vertices to OpenGL
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(g_vertex_buffer_data.Length * Vector3.SizeInBytes), g_vertex_buffer_data, BufferUsageHint.StaticDraw);
 
-
-            //BasicEngine.Managers.ShaderManager man = new BasicEngine.Managers.ShaderManager();
-            //man.CreateProgram("test", @"..\..\Shaders\vertex.glsl", @"..\..\Shaders\fragment.glsl");
-            //shaderProgram = BasicEngine.Managers.ShaderManager.GetShader("test");
-
-            //attrVertexPos = GL.GetAttribLocation(shaderProgram, "vPosition");
-            //attrVertexNorm = GL.GetAttribLocation(shaderProgram, "nPosition");
-            //uniformMView = GL.GetUniformLocation(shaderProgram, "modelview");
-
-            //if (attrVertexPos == -1 || uniformMView == -1 || attrVertexNorm == -1)
-            //{
-            //    Console.WriteLine("UAUAUAUA: Error binding attributes");
-            //}
-
-            //GL.GenBuffers(1, out vbo_position);
-            //GL.GenBuffers(1, out vbo_Norm);
-            //GL.GenBuffers(1, out vbo_mview);
-
-            //mviewdata = new Matrix4[]{
-            //    Matrix4.Identity
-            //};
-
-            //vecPosDat = new Vector3[vertices.Length];
-            //for (int i = 0; i < vertices.Length; i++)
-            //{
-            //    vecPosDat[i] = new Vector3(vertices[i].Vertex.X / 80f, vertices[i].Vertex.Y / 80f, 0.0f);
-            //}
-
-            //nPosDat = new Vector3[vertices.Length];
-            //for (int i = 0; i < vertices.Length; i++) nPosDat[i] = vertices[i].Normal;
+            //do the same for the color data
+            GL.GenBuffers(1, out colorBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(g_color_buffer_data.Length * Vector3.SizeInBytes), g_color_buffer_data, BufferUsageHint.StaticDraw);
         }
 
         public void Prepare()
         {
 
-
-
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
-            //GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vecPosDat.Length * Vector3.SizeInBytes), vecPosDat, BufferUsageHint.StaticDraw);
-            //GL.VertexAttribPointer(attrVertexPos, 3, VertexAttribPointerType.Float, false, 0, 0);
-
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_Norm);
-            //GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(nPosDat.Length * Vector3.SizeInBytes), nPosDat, BufferUsageHint.StaticDraw);
-            //GL.VertexAttribPointer(attrVertexNorm, 3, VertexAttribPointerType.Float, true, 0, 0);
-
-
-            //GL.UniformMatrix4(uniformMView, false, ref mviewdata[0]);
-
-            //GL.UseProgram(shaderProgram);
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
         public void Render()
         {
-            //Clear the screen
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
             //Use the shader
             GL.UseProgram(shaderProgram);
 
@@ -193,10 +222,10 @@ namespace BasicEngine.Rendering
             GL.UniformMatrix4(matrixID, false, ref MVP);
 
             //1st attribute buffer: vertices
-            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(0);  //attribute 0
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
             GL.VertexAttribPointer(
-                0,                              //attribute 0. No particular reason for 0, but must match the layout in the shader
+                0,                              //attribute 0. No particular reason for 0, but must match the layout in the shader --> layout (location=0)
                 3,                              //size
                 VertexAttribPointerType.Float,  //type
                 false,                          //not normalized
@@ -204,27 +233,22 @@ namespace BasicEngine.Rendering
                 0                               //array buffer offset
             );
 
+            //2nd attribute buffer: color
+            GL.EnableVertexAttribArray(1);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
+            GL.VertexAttribPointer(
+                1,                      //layout(location = 1)
+                3,
+                VertexAttribPointerType.Float,
+                false,
+                0,
+                0
+            );
+
             //Draw the triangle
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);   //starting from vertex0; 3 vertices total -> 1 triangle
+            GL.DrawArrays(PrimitiveType.Triangles, 0, g_vertex_buffer_data.Length);   //starting from vertex0; 3 vertices total -> 1 triangle
             GL.DisableVertexAttribArray(0);
 
-
-            //Prepare();
-
-            //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            //GL.Enable(EnableCap.DepthTest);
-
-
-            //GL.EnableVertexAttribArray(attrVertexPos);
-            //GL.EnableVertexAttribArray(attrVertexNorm);
-
-            //GL.DrawArrays(PrimitiveType.TriangleStrip, 0, vecPosDat.Length);
-
-            //GL.DisableVertexAttribArray(attrVertexPos);
-            //GL.EnableVertexAttribArray(attrVertexNorm);
-
-
-            //GL.Flush();
         }
     }
 }

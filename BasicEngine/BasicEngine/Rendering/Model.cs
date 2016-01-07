@@ -7,7 +7,6 @@ namespace BasicEngine.Rendering
 {
     class Model : IGameObject, IDisposable
     {
-        protected Matrix4[] modelViewDataMatrix = new Matrix4[] { Matrix4.Identity };
         protected int program;
         private Mesh mesh;
 
