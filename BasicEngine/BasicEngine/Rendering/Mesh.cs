@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using BasicEngine.Utility;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Runtime.InteropServices;
@@ -7,82 +8,28 @@ namespace BasicEngine.Rendering
 {
     class Mesh
     {
-        [StructLayout(LayoutKind.Sequential)]
-        public struct VertexObj
-        {
-            public Vector2 TexCoord;
-            public Vector3 Normal;
-            public Vector3 Vertex;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Triangle
-        {
-            public int Index0;
-            public int Index1;
-            public int Index2;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Quad
-        {
-            public int Index0;
-            public int Index1;
-            public int Index2;
-            public int Index3;
-        }
-
-        private VertexObj[] vertices;
-        public VertexObj[] Vertices
-        {
-            get { return vertices; }
-            set { vertices = value; }
-        }
-
-        private Triangle[] triangles;
-        public Triangle[] Triangles
-        {
-            get { return triangles; }
-            set { triangles = value; }
-        }
-
-        private Quad[] quads;
-        public Quad[] Quads
-        {
-            get { return quads; }
-            set { quads = value; }
-        }
-
-        private Vector3[] vecPosDat;
-        private Vector3[] nPosDat;
-        Matrix4[] mviewdata;
-
-        int verticesBufferId;
-        int trianglesBufferId;
-        int quadsBufferId;
-
-        int attrVertexPos, attrVertexNorm, uniformMView;
-        int vbo_position, vbo_Norm, vbo_mview;
         int shaderProgram;
 
         public Mesh(string fileName)
         {
             //TODO: FileService
-            //if (MeshLoader.Load(this, fileName))
-            //{
-            //    Console.WriteLine("Mesh.Mesh: Created Mesh with: ");
-            //    Console.WriteLine("\t" + vertices.Length + " Vertices");
-            //    Console.WriteLine("\t" + triangles.Length + " Triangles");
-            //    Console.WriteLine("\t" + quads.Length + " Quads");
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Mesh.Mesh: Model file " + fileName + " does not exist");
-            //}
+            if (MeshLoader.Load(this, fileName))
+            {
+                //Console.WriteLine("Mesh.Mesh: Created Mesh with: ");
+                //Console.WriteLine("\t" + vertices.Length + " Vertices");
+                //Console.WriteLine("\t" + triangles.Length + " Triangles");
+                //Console.WriteLine("\t" + quads.Length + " Quads");
+            }
+            else
+            {
+                Console.WriteLine("Mesh.Mesh: Model file " + fileName + " does not exist");
+            }
 
             Init();
 
         }
+
+        //TODO: add Getter for Vertices, UVs, Normals to set in MeshLoader
 
         int vertexArrayID;  //VAO
         int vertexBuffer;   //VBO
@@ -214,6 +161,9 @@ namespace BasicEngine.Rendering
 
         public void Render()
         {
+            //Calculate MVP
+            MVP = Matrix4.Identity * Camera.Instance.ViewMatrix * Camera.Instance.ProjectionMatrix;
+
             //Use the shader
             GL.UseProgram(shaderProgram);
 

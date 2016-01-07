@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ModelFiles\cube.obj" />
     <None Include="ModelFiles\teapot.obj" />
     <None Include="Shaders\fragment2.glsl" />
     <None Include="Shaders\fragment.glsl" />

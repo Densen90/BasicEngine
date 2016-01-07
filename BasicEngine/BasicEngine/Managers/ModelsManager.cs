@@ -17,7 +17,7 @@ namespace BasicEngine.Managers
             // triangle->SetProgram(Shader_Manager::GetShader("colorShader"));
             //triangle->Create();
             //gameModelList["triangle"] = triangle;
-            Model teapot = new Model(new Mesh(@"..\..\ModelFiles\teapot.obj"));
+            Model teapot = new Model(new Mesh(@"..\..\ModelFiles\cube.obj"));
             gameModelDic.Add("teapot", teapot);
         }
 

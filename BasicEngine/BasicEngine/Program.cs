@@ -30,8 +30,10 @@ namespace StarterKit
             gameWindow.UpdateFrame += UpdateEvent;
             gameWindow.RenderFrame += RenderEvent;
             gameWindow.Disposed += DisposeEvent;
-            gameWindow.MouseMove += MouseMoveEvent;
             gameWindow.KeyDown += KeyDownEvent;
+
+            gameWindow.KeyDown += BasicEngine.Input.Control.KeyDownEvent;
+            gameWindow.KeyUp += BasicEngine.Input.Control.KeyUpEvent;
 
             modelsManager = new ModelsManager();
 
@@ -43,6 +45,7 @@ namespace StarterKit
             //called when window should be redisplayed, here called by glutPostRedisplay in idleFunc
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); //clear buffer --> color and depth
             GL.ClearColor(Color.CornflowerBlue);
+            GL.Enable(EnableCap.DepthTest);
 
             //the renderin/gpu calls of our models
             modelsManager.Draw();
@@ -53,6 +56,7 @@ namespace StarterKit
         private void UpdateEvent(object sender, FrameEventArgs e)
         {
             modelsManager.Update();
+            BasicEngine.Input.Control.ResetKeyPress();  //reset keydown and keyup every frame, to recognize it only once
         }
 
         private void KeyDownEvent(object sender, KeyboardKeyEventArgs e)
@@ -62,15 +66,6 @@ namespace StarterKit
                 case Key.Escape: gameWindow.Close(); break;
             }
         }
-
-        private void MouseMoveEvent(object sender, MouseMoveEventArgs e)
-        {
-            Cursor.Position = new Point(1920 / 2, 1080 / 2);
-            Console.WriteLine("X: " + e.XDelta + ", Y: " + e.YDelta);
-
-            Camera.Instance.CalculateMatrices((0.005f * e.XDelta), (0.005f * e.YDelta));
-        }
-
 
         private void DisposeEvent(object sender, EventArgs e)
         {
