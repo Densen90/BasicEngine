@@ -25,6 +25,7 @@ namespace BasicEngine.Utility
             {
                 using (StreamReader streamReader = new StreamReader(fileName))
                 {
+                    Console.WriteLine("Load");
                     Load(mesh, streamReader);
                     streamReader.Close();
                     return true;
@@ -43,6 +44,7 @@ namespace BasicEngine.Utility
             normalIndices = new List<int>();
 
             string line;
+            Console.WriteLine("Reading Lines");
             while ((line = textReader.ReadLine()) != null)
             {
                 line = line.Trim(splitCharacters);
@@ -80,19 +82,30 @@ namespace BasicEngine.Utility
                         switch (parameters.Length)
                         {
                             case 4:
-                                Vector3 vInd = ParseFaceParameter(parameters[1]);
-                                Vector3 uvInd = ParseFaceParameter(parameters[1]);
-                                Vector3 nInd = ParseFaceParameter(parameters[1]);
-                                vertexIndices.Add((int)vInd.X); vertexIndices.Add((int)vInd.Y); vertexIndices.Add((int)vInd.Z);
-                                uvIndices.Add((int)uvInd.X); uvIndices.Add((int)uvInd.Y); uvIndices.Add((int)uvInd.Z);
-                                normalIndices.Add((int)nInd.X); normalIndices.Add((int)nInd.Y); normalIndices.Add((int)nInd.Z);
+                                Vector3 Ind1 = ParseFaceParameter(parameters[1]);
+                                Vector3 Ind2 = ParseFaceParameter(parameters[2]);
+                                Vector3 Ind3 = ParseFaceParameter(parameters[3]);
+                                vertexIndices.Add((int)Ind1.X); vertexIndices.Add((int)Ind2.X); vertexIndices.Add((int)Ind3.X);
+                                uvIndices.Add((int)Ind1.Y); uvIndices.Add((int)Ind2.Y); uvIndices.Add((int)Ind3.Y);
+                                normalIndices.Add((int)Ind1.Z); normalIndices.Add((int)Ind2.Z); normalIndices.Add((int)Ind3.Z);
                                 break;
+
+                            case 5:
+                                Vector3 Ind11 = ParseFaceParameter(parameters[1]);
+                                Vector3 Ind22 = ParseFaceParameter(parameters[2]);
+                                Vector3 Ind33 = ParseFaceParameter(parameters[3]);
+                                Vector3 Ind44 = ParseFaceParameter(parameters[4]);
+                                vertexIndices.Add((int)Ind11.X); vertexIndices.Add((int)Ind22.X); vertexIndices.Add((int)Ind33.X); vertexIndices.Add((int)Ind44.X);
+                                uvIndices.Add((int)Ind11.Y); uvIndices.Add((int)Ind22.Y); uvIndices.Add((int)Ind33.Y); uvIndices.Add((int)Ind44.Y);
+                                normalIndices.Add((int)Ind11.Z); normalIndices.Add((int)Ind22.Z); normalIndices.Add((int)Ind33.Z); normalIndices.Add((int)Ind44.Z);
+                                break;
+
                         }
                         break;
                 }
             }
 
-            SortList();
+            SortList(mesh);
 
             vertices = null;
             normals = null;
@@ -102,26 +115,64 @@ namespace BasicEngine.Utility
         private static Vector3 ParseFaceParameter(string parameter)
         {
             string[] indices = parameter.Split(faceParamaterSplitter);
+
             if(indices.Length<3)
             {
                 Console.WriteLine("MeshLoader: Face parameter has less than 3 values.");
                 return Vector3.Zero;
             }
 
-            Vector3 indVec = new Vector3(int.Parse(indices[0]), int.Parse(indices[1]), int.Parse(indices[2]));
+            int vi = indices[0] != "" ? int.Parse(indices[0]) : 0;
+            int ti = indices[1] != "" ? int.Parse(indices[1]) : 0;
+            int ni = indices[2] != "" ? int.Parse(indices[2]) : 0;
+
+            Vector3 indVec = new Vector3(vi, ti, ni);
             return indVec;
         }
 
-        private static void SortList()
+        private static void SortList(Mesh mesh)
         {
+            Console.WriteLine("Sorting Vertices: " + vertexIndices.Count + "/" + vertices.Count);
+            List<Vector3> sortVertList = new List<Vector3>();
             for(int i=0; i<vertexIndices.Count; i++)
             {
                 //Get the index from the vertex
                 int vertexIndex = vertexIndices[i];
+                if (vertexIndex == 0) continue; //there is no index 0, only if field was empty in file
                 //position is vertexIndex-1 --> C' indexing starts at 0, Obj indexing starts at 1
                 Vector3 vertex = vertices[vertexIndex-1];
-
+                sortVertList.Add(vertex);
             }
+
+            Console.WriteLine("Sorting Normals: " + normalIndices.Count);
+            List<Vector3> sortNormList = new List<Vector3>();
+            for (int i = 0; i < normalIndices.Count; i++)
+            {
+                //Get the index from the vertex
+                int normalIndex = normalIndices[i];
+                if (normalIndex == 0) continue; //there is no index 0, only if field was empty in file
+                //position is normalIndex-1 --> C' indexing starts at 0, Obj indexing starts at 1
+                Vector3 normal = normals[normalIndex - 1];
+                sortNormList.Add(normal);
+            }
+
+            Console.WriteLine("Sorting UVs: " + uvIndices.Count);
+            List<Vector2> sortUVList = new List<Vector2>();
+            for (int i = 0; i < uvIndices.Count; i++)
+            {
+                //Get the index from the vertex
+                int uvIndex = uvIndices[i];
+                if (uvIndex == 0) continue; //there is no index 0, only if field was empty in file
+                //position is normalIndex-1 --> C' indexing starts at 0, Obj indexing starts at 1
+                Vector2 uv = texCoords[uvIndex - 1];
+                sortUVList.Add(uv);
+            }
+
+            Console.WriteLine("Finish Sorting");
+
+            mesh.Vertices = sortVertList.ToArray();
+            mesh.Normals = sortNormList.ToArray();
+            mesh.UVs = sortUVList.ToArray();
         }
     }
 }
