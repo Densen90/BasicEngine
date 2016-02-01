@@ -58,14 +58,13 @@
     <Compile Include="Rendering\IGameObject.cs" />
     <Compile Include="Rendering\Mesh.cs" />
     <Compile Include="Rendering\Model.cs" />
+    <Compile Include="Utility\IndexVBO.cs" />
     <Compile Include="Utility\MeshLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ModelFiles\ape.obj" />
-    <None Include="ModelFiles\capsule.obj" />
-    <None Include="ModelFiles\cube.obj" />
-    <None Include="ModelFiles\teapot.obj" />
+    <None Include="ModelFiles\suzanne.obj" />
+    <None Include="ModelFiles\tower.obj" />
     <None Include="Shaders\fragment2.glsl" />
     <None Include="Shaders\fragment.glsl" />
     <None Include="Shaders\vertex2.glsl" />

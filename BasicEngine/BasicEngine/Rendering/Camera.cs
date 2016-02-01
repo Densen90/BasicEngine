@@ -25,7 +25,7 @@ namespace BasicEngine.Rendering
             FOV = (float)Math.PI / 4f;
             Aspect = 4f / 3f;
             NearPlane = 0.1f;
-            FarPlane = 100f;
+            FarPlane = 1000f;
             Position = new Vector3(0, 0, 5);
             Direction = Vector3.Zero;
 
@@ -73,6 +73,8 @@ namespace BasicEngine.Rendering
 
             projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, Aspect, NearPlane, FarPlane);
             viewMatrix = Matrix4.LookAt(Position, Position + Direction, up);
+
+            //Console.WriteLine("Pos: " + Position);
         }
     }
 }

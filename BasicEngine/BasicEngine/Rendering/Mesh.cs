@@ -30,14 +30,19 @@ namespace BasicEngine.Rendering
         public Vector3[] Normals { get; set; }
         public Vector2[] UVs { get; set; }
 
+        private Vector3[] indexedVertices;
+        private Vector2[] indexedUVs;
+        private Vector3[] indexedNormals;
+        private int[] indices;
+
         //TODO: add Getter for Vertices, UVs, Normals to set in MeshLoader
 
         int vertexArrayID;  //VAO
         int vertexBuffer;   //VBO
-        int colorBuffer;    //VBO
+        int normalBuffer;
+        int elementBuffer;  //for indexing
         int matrixID;
         Matrix4 MVP;
-        Vector3[] g_vertex_buffer_data;
 
         public void Init()
         {
@@ -51,28 +56,26 @@ namespace BasicEngine.Rendering
 
             //Creating our MVP Matrix --> TODO: Camera Class?
             matrixID = GL.GetUniformLocation(shaderProgram, "mvpMatrix");   //Get the Handle for our uniform in our shader
-            //Creating the ProjectionMatrix for transformation from camera to homogenous space
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI/4f, 4f/3f, 0.1f, 10.0f);
-            //Create View Matrix for transformation from World to Camera Space
-            Matrix4 view = Matrix4.LookAt(
-                                    new Vector3(4, 2, 2), //Camera is at (4,3,3), in World Space
-                                    new Vector3(0, 0, 0), //looks at the origin
-                                    Vector3.UnitY);//Up Vector
-            //Model matrix : an identity matrix (model will be at the origin)
-            Matrix4 model = Matrix4.Identity;   //TODO: here TranslationMatrix*RotationMatrix*ScaleMatrix -> Identity no transformation
-            MVP = model * view * projection;
+
+            //sort our indices
+            IndexVBO.Index(Vertices, UVs, Normals, out indices, out indexedVertices, out indexedUVs, out indexedNormals);
 
             //generate 1 buffer, put resulting identifier in vertexBuffer
             GL.GenBuffers(1, out vertexBuffer);
             //The following command will talk about our 'vertexBuffer' buffer
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
             //Give the vertices to OpenGL
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vector3.SizeInBytes), Vertices, BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(indexedVertices.Length * Vector3.SizeInBytes), indexedVertices, BufferUsageHint.StaticDraw);
 
-            //do the same for the color data, give vertex positions as color data for testing
-            GL.GenBuffers(1, out colorBuffer);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vector3.SizeInBytes), Vertices, BufferUsageHint.StaticDraw);
+            //same for vertex Normals
+            GL.GenBuffers(1, out normalBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(indexedNormals.Length * Vector3.SizeInBytes), indexedNormals, BufferUsageHint.StaticDraw);
+
+            //and one buffer for the indexes
+            GL.GenBuffers(1, out elementBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, elementBuffer);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(indices.Length * sizeof(int)), indices, BufferUsageHint.StaticDraw);
         }
 
         public void Prepare()
@@ -104,20 +107,24 @@ namespace BasicEngine.Rendering
                 0                               //array buffer offset
             );
 
-            //2nd attribute buffer: color
+            //2nd attribute buffer: normal
             GL.EnableVertexAttribArray(1);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
             GL.VertexAttribPointer(
                 1,                      //layout(location = 1)
                 3,
                 VertexAttribPointerType.Float,
-                false,
+                true,
                 0,
                 0
             );
 
+            //Index Buffer --> ElementArray
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, elementBuffer);
+
             //Draw the triangle
-            GL.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Length);   //starting from vertex0; 3 vertices total -> 1 triangle
+            //GL.DrawArrays(PrimitiveType.Triangles, 0, Vertices.Length);   //starting from vertex0; 3 vertices total -> 1 triangle
+            GL.DrawElements(BeginMode.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
             GL.DisableVertexAttribArray(0);
 
         }
