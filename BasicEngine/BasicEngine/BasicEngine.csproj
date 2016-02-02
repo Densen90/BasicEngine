@@ -63,12 +63,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ModelFiles\suzanne.obj" />
-    <None Include="ModelFiles\tower.obj" />
     <None Include="Shaders\fragment2.glsl" />
     <None Include="Shaders\fragment.glsl" />
     <None Include="Shaders\vertex2.glsl" />
     <None Include="Shaders\vertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ModelFiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

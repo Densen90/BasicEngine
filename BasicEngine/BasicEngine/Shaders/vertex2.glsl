@@ -2,23 +2,38 @@
 
 // Input vertex data, different for all executions of this shader.
 layout(location = 0) in vec3 vertexPosition_modelspace;
-layout(location = 1) in vec3 vertexNormal;
+layout(location = 1) in vec3 vertexNormal_modelspace;
 
 out vec3 vCol;
+out vec3 PosWorldspace;
+out vec3 NormalCameraspace;
+out vec3 EyeDirCameraspace;
+out vec3 LightDirCameraspace;
 
 uniform mat4 mvpMatrix;
+uniform mat4 M;
+uniform mat4 V;
+uniform vec3 LightPosWorldspace;
 
 void main()
 {
-	vec4 pos = mvpMatrix * vec4(vertexPosition_modelspace, 1);
+	vCol = vec3(0.5, 0.3, 0.1);
 
-	vec3 lightDir = normalize(vec3(-1,1,1));
-	vec3 lightCol = vec3(0.9, 0.2, 0.2);
-	vec3 materialCol = vec3(0.3, 0.8, 0.5);
+	// Output position of the vertex, in clip space : MVP * position
+	gl_Position = mvpMatrix * vec4(vertexPosition_modelspace, 1);
 
-	float ambient = clamp(dot(lightDir, vertexNormal), 0.2, 1);
+	// Position of the vertex, in worldspace : M * position
+	PosWorldspace = (M * vec4(vertexPosition_modelspace, 1)).xyz;
 
-	vCol = materialCol*lightCol*ambient;
+	// Vector that goes from the vertex to the camera, in camera space.
+	// In camera space, the camera is at the origin (0,0,0).
+	vec3 vertexPosition_cameraspace = ( M * V * vec4(vertexPosition_modelspace,1)).xyz;
+	EyeDirCameraspace = vec3(0,0,0) - vertexPosition_cameraspace;
 
-    gl_Position = pos;
+	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
+	vec3 LightPosition_cameraspace = ( V * vec4(LightPosWorldspace,1)).xyz;
+	LightDirCameraspace = LightPosition_cameraspace + EyeDirCameraspace;
+	
+	// Normal of the the vertex, in camera space
+	NormalCameraspace = ( M * V * vec4(vertexNormal_modelspace,0)).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
 }

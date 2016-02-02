@@ -41,7 +41,7 @@ namespace BasicEngine.Rendering
         int vertexBuffer;   //VBO
         int normalBuffer;
         int elementBuffer;  //for indexing
-        int matrixID;
+        int matrixID, mID, vID, mvID, lightPosID;
         Matrix4 MVP;
 
         public void Init()
@@ -56,6 +56,10 @@ namespace BasicEngine.Rendering
 
             //Creating our MVP Matrix --> TODO: Camera Class?
             matrixID = GL.GetUniformLocation(shaderProgram, "mvpMatrix");   //Get the Handle for our uniform in our shader
+            mID = GL.GetUniformLocation(shaderProgram, "M");
+            vID = GL.GetUniformLocation(shaderProgram, "V");
+            mvID = GL.GetUniformLocation(shaderProgram, "MV");
+            lightPosID = GL.GetUniformLocation(shaderProgram, "LightPosWorldspace");
 
             //sort our indices
             IndexVBO.Index(Vertices, UVs, Normals, out indices, out indexedVertices, out indexedUVs, out indexedNormals);
@@ -86,14 +90,24 @@ namespace BasicEngine.Rendering
         public void Render()
         {
             //Calculate MVP
-            MVP = Matrix4.Identity * Camera.Instance.ViewMatrix * Camera.Instance.ProjectionMatrix;
+            Matrix4 M = Matrix4.Identity;
+            Matrix4 V = Camera.Instance.ViewMatrix;
+            Matrix4 MV = M * V;
+            MVP = MV * Camera.Instance.ProjectionMatrix;
+
+            //TODO: do in seperate class
+            Vector3 lightPos = new Vector3(-2,2,4);
+            
 
             //Use the shader
             GL.UseProgram(shaderProgram);
 
             //send the modelViewMatrix to our Shader as uniform
-            Matrix4 m = Matrix4.Identity;
             GL.UniformMatrix4(matrixID, false, ref MVP);
+            GL.UniformMatrix4(mID, false, ref M);
+            GL.UniformMatrix4(vID, false, ref V);
+            GL.UniformMatrix4(mvID, false, ref MV);
+            GL.Uniform3(lightPosID, ref lightPos);
 
             //1st attribute buffer: vertices
             GL.EnableVertexAttribArray(0);  //attribute 0

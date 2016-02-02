@@ -162,7 +162,11 @@ namespace BasicEngine.Utility
             {
                 //Get the index from the vertex
                 int uvIndex = uvIndices[i];
-                if (uvIndex == 0) continue; //there is no index 0, only if field was empty in file
+                if (uvIndex == 0)
+                {
+                    sortUVList.Add(Vector2.Zero);
+                    continue; //there is no index 0, only if field was empty in file
+                }
                 //position is normalIndex-1 --> C' indexing starts at 0, Obj indexing starts at 1
                 Vector2 uv = texCoords[uvIndex - 1];
                 sortUVList.Add(uv);
