@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace BasicEngine.Utility
 {
+    [Obsolete("IndexVBO is deprecated.")]
     class IndexVBO
     {
         public static void Index(Vector3[] in_vertices, Vector2[] in_uvs, Vector3[] in_normals, out int[] out_indexes, out Vector3[] out_vertices, out Vector2[] out_uvs, out Vector3[] out_normals)

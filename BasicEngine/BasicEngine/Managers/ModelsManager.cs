@@ -12,12 +12,7 @@ namespace BasicEngine.Managers
         {
             if (gameModelDic == null) gameModelDic = new Dictionary<string, IGameObject>();
 
-            //set up our triangle object
-            //Models::Triangle* triangle = new Models::Triangle;
-            // triangle->SetProgram(Shader_Manager::GetShader("colorShader"));
-            //triangle->Create();
-            //gameModelList["triangle"] = triangle;
-            Model teapot = new Model(new Mesh(@"..\..\ModelFiles\suzanne.obj"));
+            Model teapot = new Model(new Mesh(@"..\..\ModelFiles\plant.obj"));
             gameModelDic.Add("teapot", teapot);
         }
 

@@ -56,21 +56,25 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\IGameObject.cs" />
-    <Compile Include="Rendering\Mesh.cs" />
+    <Compile Include="Deprecated\ModelMesh.cs" />
     <Compile Include="Rendering\Model.cs" />
-    <Compile Include="Utility\IndexVBO.cs" />
+    <Compile Include="Rendering\Mesh.cs" />
+    <Compile Include="Deprecated\IndexVBO.cs" />
+    <Compile Include="Deprecated\ModelMeshLoader.cs" />
     <Compile Include="Utility\MeshLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ModelFiles\plant.obj" />
+    <None Include="ModelFiles\Songoku.obj" />
+    <None Include="ModelFiles\suzanne.obj" />
+    <None Include="ModelFiles\tower.obj" />
     <None Include="Shaders\fragment2.glsl" />
     <None Include="Shaders\fragment.glsl" />
     <None Include="Shaders\vertex2.glsl" />
     <None Include="Shaders\vertex.glsl" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ModelFiles\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
