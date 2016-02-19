@@ -12,8 +12,8 @@ namespace BasicEngine.Managers
         {
             if (gameModelDic == null) gameModelDic = new Dictionary<string, IGameObject>();
 
-            Model teapot = new Model(new Mesh(@"..\..\ModelFiles\plant.obj"));
-            gameModelDic.Add("teapot", teapot);
+            Model mod = new Model();
+            gameModelDic.Add("mod", mod);
         }
 
         public void Dispose()

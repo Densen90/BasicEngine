@@ -11,9 +11,14 @@ namespace BasicEngine.Rendering
         protected int program;
         private Mesh mesh;
 
-        public Model(Mesh mesh)
+        public Model()
         {
-            this.mesh = mesh;
+            this.mesh = new Mesh(@"..\..\ModelFiles\cube.obj");
+        }
+
+        public Model(string modelFile)
+        {
+            this.mesh = new Mesh(modelFile);
         }
 
         public void Dispose()

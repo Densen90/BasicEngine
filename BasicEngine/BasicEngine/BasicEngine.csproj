@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ModelFiles\cube.obj" />
     <None Include="ModelFiles\plant.obj" />
     <None Include="ModelFiles\Songoku.obj" />
     <None Include="ModelFiles\suzanne.obj" />

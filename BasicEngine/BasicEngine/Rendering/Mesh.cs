@@ -28,15 +28,15 @@ public class Mesh
     }
     ObjQuad[] quads;
 
-    int shaderProgram;
-    int vertexArrayID;  //VAO
-    int vertexBuffer;
-    int normalBuffer;
-    int trianglesBufferId;
-    int quadsBufferId;
+    private int shaderProgram;
+    private int vertexArrayID;  //VAO
+    private int vertexBuffer;
+    private int normalBuffer;
+    private int trianglesBufferId;
+    private int quadsBufferId;
 
-    int matrixID, mID, vID, mvID, lightPosID;
-    Matrix4 MVP;
+    private int matrixID, mID, vID, mvID, lightPosID;
+    private Matrix4 MVP;
 
     public Mesh(string fileName)
     {
@@ -67,7 +67,7 @@ public class Mesh
         //The following command will talk about our 'vertexBuffer' buffer
         GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
         //Give the vertices to OpenGL
-        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Select(v=>v.Vertex).ToArray().Length * Marshal.SizeOf(typeof(ObjVertex))), vertices.Select(v => v.Vertex).ToArray(), BufferUsageHint.StaticDraw);
+        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Select(v=>v.Vertex).ToArray().Length * Vector3.SizeInBytes), vertices.Select(v => v.Vertex).ToArray(), BufferUsageHint.StaticDraw);
 
         //same for vertex Normals
         GL.GenBuffers(1, out normalBuffer);
