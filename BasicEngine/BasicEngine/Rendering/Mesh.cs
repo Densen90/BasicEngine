@@ -28,7 +28,8 @@ public class Mesh
     }
     ObjQuad[] quads;
 
-    private int shaderProgram;
+    public Shader Shader{ get; set; }
+
     private int vertexArrayID;  //VAO
     private int vertexBuffer;
     private int normalBuffer;
@@ -41,7 +42,7 @@ public class Mesh
     public Mesh(string fileName)
     {
         MeshLoader.Load(this, fileName);
-
+        Shader = BasicEngine.Managers.ShaderManager.GetShader("DefaultShader");
         Init();
     }
 
@@ -50,17 +51,12 @@ public class Mesh
         GL.GenVertexArrays(1, out vertexArrayID);
         GL.BindVertexArray(vertexArrayID);
 
-        //TODO: making static class?
-        BasicEngine.Managers.ShaderManager man = new BasicEngine.Managers.ShaderManager();
-        man.CreateProgram("test2", @"..\..\Shaders\vertex2.glsl", @"..\..\Shaders\fragment2.glsl");
-        shaderProgram = BasicEngine.Managers.ShaderManager.GetShader("test2");
-
         //Creating our MVP Matrix --> TODO: Camera Class?
-        matrixID = GL.GetUniformLocation(shaderProgram, "mvpMatrix");   //Get the Handle for our uniform in our shader
-        mID = GL.GetUniformLocation(shaderProgram, "M");
-        vID = GL.GetUniformLocation(shaderProgram, "V");
-        mvID = GL.GetUniformLocation(shaderProgram, "MV");
-        lightPosID = GL.GetUniformLocation(shaderProgram, "LightPosWorldspace");
+        matrixID = Shader.GetUniformLocation("mvpMatrix");   //Get the Handle for our uniform in our shader
+        mID = Shader.GetUniformLocation("M");
+        vID = Shader.GetUniformLocation("V");
+        mvID = Shader.GetUniformLocation("MV");
+        lightPosID = Shader.GetUniformLocation("LightPosWorldspace");
 
         //generate 1 buffer, put resulting identifier in vertexBuffer
         GL.GenBuffers(1, out vertexBuffer);
@@ -96,9 +92,8 @@ public class Mesh
         //TODO: do in seperate class
         Vector3 lightPos = new Vector3(-2, 2, 4);
 
-
         //Use the shader
-        GL.UseProgram(shaderProgram);
+        Shader.Begin();
 
         //send the modelViewMatrix to our Shader as uniform
         GL.UniformMatrix4(matrixID, false, ref MVP);

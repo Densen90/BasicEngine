@@ -8,17 +8,16 @@ namespace BasicEngine.Rendering
 {
     class Model : IGameObject, IDisposable
     {
-        protected int program;
-        private Mesh mesh;
+        public Mesh Mesh{ get; set; }
 
         public Model()
         {
-            this.mesh = new Mesh(@"..\..\ModelFiles\cube.obj");
+            this.Mesh = new Mesh(@"..\..\ModelFiles\cube.obj");
         }
 
         public Model(string modelFile)
         {
-            this.mesh = new Mesh(modelFile);
+            this.Mesh = new Mesh(modelFile);
         }
 
         public void Dispose()
@@ -29,7 +28,7 @@ namespace BasicEngine.Rendering
         public void Draw()
         {
             // ovverride in subclass
-            mesh.Render();
+            Mesh.Render();
         }
 
         public void Update()
@@ -54,11 +53,6 @@ namespace BasicEngine.Rendering
 
                 Camera.Instance.CalculateMatrices(horizAngle, vertAngle, move);
             }
-        }
-
-        public void SetProgram(int program)
-        {
-            this.program = program;
         }
     }
 }
