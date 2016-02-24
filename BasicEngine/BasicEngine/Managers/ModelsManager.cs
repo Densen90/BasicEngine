@@ -11,6 +11,8 @@ namespace BasicEngine.Managers
         public ModelsManager()
         {
             if (gameModelDic == null) gameModelDic = new Dictionary<string, IGameObject>();
+            //Create the default Shader
+            Utility.ShaderLoader.LoadFromString("DefaultShader", @"..\..\Shaders\vertexDefault.glsl", @"..\..\Shaders\fragmentDefault.glsl");
 
             Model mod = new Model();
             gameModelDic.Add("mod", mod);

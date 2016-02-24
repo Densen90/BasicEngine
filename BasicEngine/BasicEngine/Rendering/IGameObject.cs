@@ -7,6 +7,5 @@ namespace BasicEngine.Rendering
     {
         void Draw();
         void Update();
-        void SetProgram(int program);
     }
 }
