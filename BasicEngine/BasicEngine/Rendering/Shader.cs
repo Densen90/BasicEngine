@@ -52,6 +52,7 @@ namespace BasicEngine.Rendering
             if (compileSuccess != 1) throw new ShaderException(type.ToString(), "Log for " + Name + Environment.NewLine + GL.GetShaderInfoLog(shader));
 
             GL.AttachShader(program, shader);
+            Console.WriteLine("Created " + type.ToString() + " for Shader: " + Name);
         }
 
         public int GetUniformLocation(string uName)
@@ -75,7 +76,7 @@ namespace BasicEngine.Rendering
             {
                 GL.LinkProgram(program);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 throw new ShaderException("Link", "Linker error for " + Name);
             }

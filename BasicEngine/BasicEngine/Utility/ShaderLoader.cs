@@ -21,6 +21,7 @@ namespace BasicEngine.Utility
 
             shader.Compile(vertexSrc, ShaderType.VertexShader);
             shader.Compile(fragmentSrc, ShaderType.FragmentShader);
+            shader.Link();
 
             ShaderManager.AddShader(shaderName, shader);
 
