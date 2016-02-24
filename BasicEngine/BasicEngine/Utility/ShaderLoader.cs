@@ -2,6 +2,7 @@
 using BasicEngine.Rendering;
 using BasicEngine.Managers;
 using System.IO;
+using System;
 
 namespace BasicEngine.Utility
 {
@@ -19,9 +20,17 @@ namespace BasicEngine.Utility
 
             Shader shader = new Shader(shaderName);
 
-            shader.Compile(vertexSrc, ShaderType.VertexShader);
-            shader.Compile(fragmentSrc, ShaderType.FragmentShader);
-            shader.Link();
+            try
+            {
+                shader.Compile(vertexSrc, ShaderType.VertexShader);
+                shader.Compile(fragmentSrc, ShaderType.FragmentShader);
+                shader.Link();
+            }
+            catch(ShaderException se)
+            {
+                Console.WriteLine(se.Type + " : " + se.Message);
+            }
+            
 
             ShaderManager.AddShader(shaderName, shader);
 

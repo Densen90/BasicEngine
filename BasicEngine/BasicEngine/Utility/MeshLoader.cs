@@ -2,22 +2,26 @@
 using System.IO;
 using System.Collections.Generic;
 using OpenTK;
+using System.Drawing;
 
 public class MeshLoader
 {
-    public static bool Load(Mesh mesh, string fileName)
+    static string filepath = string.Empty;
+    public static bool Load(Mesh mesh, string path, string fileName)
     {
         try
         {
-            using (StreamReader streamReader = new StreamReader(fileName))
+            using (StreamReader streamReader = new StreamReader(path+fileName))
             {
-                Console.WriteLine("Load");
+                Console.WriteLine(Environment.NewLine + "Loading OBJ File " + fileName);
+                filepath = path;
                 Load(mesh, streamReader);
                 streamReader.Close();
+                filepath = string.Empty;
                 return true;
             }
         }
-        catch { return false; }
+        catch { filepath = string.Empty; return false; }
     }
 
     static char[] splitCharacters = new char[] { ' ' };
@@ -42,7 +46,6 @@ public class MeshLoader
         objQuads = new List<Mesh.ObjQuad>();
 
         string line;
-        Console.WriteLine("Reading Lines");
         while ((line = textReader.ReadLine()) != null)
         {
             line = line.Trim(splitCharacters);
@@ -97,6 +100,10 @@ public class MeshLoader
                             break;
                     }
                     break;
+                case "mtllib":
+                    //TODO: Only One Texture Loading now --> make more
+                    //mesh.Texture = LoadMtl(parameters[1].Replace(",", "."));
+                    break;
             }
         }
 
@@ -104,10 +111,10 @@ public class MeshLoader
         mesh.Triangles = objTriangles.ToArray();
         mesh.Quads = objQuads.ToArray();
 
-        Console.WriteLine("Finished Loading file: " + Environment.NewLine + 
+        Console.WriteLine("Finished Loading ObjectFile"  + Environment.NewLine + 
             mesh.Vertices.Length + " Vertices" + Environment.NewLine + 
             mesh.Triangles.Length + " Triangles" + Environment.NewLine + 
-            mesh.Quads.Length + " Quads");
+            mesh.Quads.Length + " Quads" + Environment.NewLine + Environment.NewLine);
 
         objVerticesIndexDictionary = null;
         vertices = null;
@@ -170,6 +177,37 @@ public class MeshLoader
             objVertices.Add(newObjVertex);
             objVerticesIndexDictionary[newObjVertex] = objVertices.Count - 1;
             return objVertices.Count - 1;
+        }
+    }
+
+    static Bitmap LoadMtl(string name)
+    {
+        try
+        {
+            using (StreamReader streamReader = new StreamReader(filepath+name))
+            {
+                Bitmap file = null;
+                string line;
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    string[] parameters = line.Split(splitCharacters);
+
+                    switch (parameters[0])
+                    {
+                        case "map_Kd":
+                            Console.WriteLine("Found texture to load: " + parameters[1]);
+                            file = new Bitmap(filepath+parameters[1]);
+                            break;
+                    }
+                }
+                streamReader.Close();
+                return file;
+            }
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return null;
         }
     }
 }

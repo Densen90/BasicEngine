@@ -12,6 +12,7 @@ out vec3 color;
 
 uniform mat4 MV;
 uniform vec3 LightPosWorldspace;
+uniform sampler2D MainTexture;
 
 void main()
 {

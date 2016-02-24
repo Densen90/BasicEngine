@@ -68,13 +68,17 @@
     <None Include="ModelFiles\plant.obj" />
     <None Include="ModelFiles\Songoku.obj" />
     <None Include="ModelFiles\suzanne.obj" />
+    <None Include="ModelFiles\texcube.mtl" />
+    <None Include="ModelFiles\texcube.obj" />
     <None Include="ModelFiles\tower.obj" />
     <None Include="Shaders\fragmentDefault.glsl" />
     <None Include="Shaders\fragment.glsl" />
     <None Include="Shaders\vertexDefault.glsl" />
     <None Include="Shaders\vertex.glsl" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ModelFiles\Cube.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

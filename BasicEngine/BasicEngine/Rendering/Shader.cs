@@ -6,10 +6,12 @@ namespace BasicEngine.Rendering
     public class ShaderException : Exception
     {
         public string Type { get; set; }
+        public string Message { get; set; }
 
         public ShaderException(string type, string msg)
         {
             Type = type;
+            Message = msg;
         }
     }
 

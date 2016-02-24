@@ -12,12 +12,12 @@ namespace BasicEngine.Rendering
 
         public Model()
         {
-            this.Mesh = new Mesh(@"..\..\ModelFiles\cube.obj");
+            this.Mesh = new Mesh(@"..\..\ModelFiles\", "cube.obj");
         }
 
         public Model(string modelFile)
         {
-            this.Mesh = new Mesh(modelFile);
+            this.Mesh = new Mesh(@"..\..\ModelFiles\", modelFile);
         }
 
         public void Dispose()

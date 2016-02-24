@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using BasicEngine.Rendering;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 public class Mesh
 {
@@ -30,18 +32,28 @@ public class Mesh
 
     public Shader Shader{ get; set; }
 
+    public Bitmap Texture;
+
     private int vertexArrayID;  //VAO
     private int vertexBuffer;
     private int normalBuffer;
     private int trianglesBufferId;
     private int quadsBufferId;
 
-    private int matrixID, mID, vID, mvID, lightPosID;
+    private int texID;
+
+    private int matrixID, mID, vID, mvID, lightPosID, mainTexID;
     private Matrix4 MVP;
 
-    public Mesh(string fileName)
+    public Mesh(string path, string fileName)
     {
-        MeshLoader.Load(this, fileName);
+        MeshLoader.Load(this, path, fileName);
+
+        if(Texture!=null)
+        {
+            Console.WriteLine("Found Texture in Mesh, Generating ID");
+        }
+
         Shader = BasicEngine.Managers.ShaderManager.GetShader("DefaultShader");
         Init();
     }
@@ -57,6 +69,7 @@ public class Mesh
         vID = Shader.GetUniformLocation("V");
         mvID = Shader.GetUniformLocation("MV");
         lightPosID = Shader.GetUniformLocation("LightPosWorldspace");
+        mainTexID = Shader.GetUniformLocation("MainTexture");
 
         //generate 1 buffer, put resulting identifier in vertexBuffer
         GL.GenBuffers(1, out vertexBuffer);
@@ -101,6 +114,7 @@ public class Mesh
         GL.UniformMatrix4(vID, false, ref V);
         GL.UniformMatrix4(mvID, false, ref MV);
         GL.Uniform3(lightPosID, ref lightPos);
+        GL.Uniform1(mainTexID, texID);
 
         //1st attribute buffer: vertices
         GL.EnableVertexAttribArray(0);  //attribute 0
@@ -137,6 +151,22 @@ public class Mesh
         }
 
         GL.DisableVertexAttribArray(0);
+    }
+
+    private void LoadImage(Bitmap image)
+    {
+        texID = GL.GenTexture();
+
+        GL.BindTexture(TextureTarget.Texture2D, texID);
+        BitmapData data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height),
+                ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, data.Width, data.Height, 0,
+            OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0);
+
+        image.UnlockBits(data);
+
+        GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
     }
 
     [StructLayout(LayoutKind.Sequential)]
