@@ -14,7 +14,7 @@ namespace BasicEngine.Managers
             //Create the default Shader
             Utility.ShaderLoader.LoadFromString("DefaultShader", @"..\..\Shaders\vertexDefault.glsl", @"..\..\Shaders\fragmentDefault.glsl");
 
-            Model mod = new Model();
+            Model mod = new Model("texcube.obj");
             gameModelDic.Add("mod", mod);
         }
 

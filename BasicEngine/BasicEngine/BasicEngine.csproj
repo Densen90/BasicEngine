@@ -64,10 +64,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ModelFiles\bear.obj" />
     <None Include="ModelFiles\cube.obj" />
     <None Include="ModelFiles\plant.obj" />
     <None Include="ModelFiles\Songoku.obj" />
     <None Include="ModelFiles\suzanne.obj" />
+    <None Include="ModelFiles\teddy.mtl" />
     <None Include="ModelFiles\texcube.mtl" />
     <None Include="ModelFiles\texcube.obj" />
     <None Include="ModelFiles\tower.obj" />
@@ -78,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ModelFiles\Cube.PNG" />
+    <Content Include="ModelFiles\ToonTeddy.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,12 +3,14 @@
 // Input vertex data, different for all executions of this shader.
 layout(location = 0) in vec3 vertexPosition_modelspace;
 layout(location = 1) in vec3 vertexNormal_modelspace;
+layout(location = 2) in vec2 texCoord;
 
 out vec3 vCol;
 out vec3 PosWorldspace;
 out vec3 NormalCameraspace;
 out vec3 EyeDirCameraspace;
 out vec3 LightDirCameraspace;
+out vec2 uv;
 
 uniform mat4 mvpMatrix;
 uniform mat4 M;
@@ -17,7 +19,8 @@ uniform vec3 LightPosWorldspace;
 
 void main()
 {
-	vCol = vec3(0.5, 0.3, 0.1);
+	vCol = vec3(0.3, 0.6, 0.4);
+	uv = texCoord;
 
 	// Output position of the vertex, in clip space : MVP * position
 	gl_Position = mvpMatrix * vec4(vertexPosition_modelspace, 1);

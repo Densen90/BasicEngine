@@ -102,7 +102,7 @@ public class MeshLoader
                     break;
                 case "mtllib":
                     //TODO: Only One Texture Loading now --> make more
-                    //mesh.Texture = LoadMtl(parameters[1].Replace(",", "."));
+                    mesh.Texture = LoadMtl(parameters[1].Replace(",", "."));
                     break;
             }
         }
@@ -112,9 +112,8 @@ public class MeshLoader
         mesh.Quads = objQuads.ToArray();
 
         Console.WriteLine("Finished Loading ObjectFile"  + Environment.NewLine + 
-            mesh.Vertices.Length + " Vertices" + Environment.NewLine + 
-            mesh.Triangles.Length + " Triangles" + Environment.NewLine + 
-            mesh.Quads.Length + " Quads" + Environment.NewLine + Environment.NewLine);
+            mesh.Vertices.Length + " Vertices, " + mesh.Triangles.Length + " Triangles, " + mesh.Quads.Length + " Quads" + Environment.NewLine + 
+            texCoords.Count + " TexCoords" + Environment.NewLine + Environment.NewLine);
 
         objVerticesIndexDictionary = null;
         vertices = null;

@@ -37,6 +37,7 @@ public class Mesh
     private int vertexArrayID;  //VAO
     private int vertexBuffer;
     private int normalBuffer;
+    private int texBuffer;
     private int trianglesBufferId;
     private int quadsBufferId;
 
@@ -52,6 +53,7 @@ public class Mesh
         if(Texture!=null)
         {
             Console.WriteLine("Found Texture in Mesh, Generating ID");
+            LoadImage(Texture);
         }
 
         Shader = BasicEngine.Managers.ShaderManager.GetShader("DefaultShader");
@@ -83,6 +85,11 @@ public class Mesh
         GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
         GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Select(v => v.Normal).ToArray().Length * Vector3.SizeInBytes), vertices.Select(v => v.Normal).ToArray(), BufferUsageHint.StaticDraw);
 
+        //same for TexCoords
+        GL.GenBuffers(1, out texBuffer);
+        GL.BindBuffer(BufferTarget.ArrayBuffer, texBuffer);
+        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Select(v => v.TexCoord).ToArray().Length * Vector3.SizeInBytes), vertices.Select(v => v.TexCoord).ToArray(), BufferUsageHint.StaticDraw);
+
         //same for the indexed triangles
         GL.GenBuffers(1, out trianglesBufferId);
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, trianglesBufferId);
@@ -103,7 +110,7 @@ public class Mesh
         MVP = MV * Camera.Instance.ProjectionMatrix;
 
         //TODO: do in seperate class
-        Vector3 lightPos = new Vector3(-2, 2, 4);
+        Vector3 lightPos = new Vector3(-3, 3, 5);
 
         //Use the shader
         Shader.Begin();
@@ -114,7 +121,13 @@ public class Mesh
         GL.UniformMatrix4(vID, false, ref V);
         GL.UniformMatrix4(mvID, false, ref MV);
         GL.Uniform3(lightPosID, ref lightPos);
-        GL.Uniform1(mainTexID, texID);
+
+        if (Texture != null)
+        {
+            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.BindTexture(TextureTarget.Texture2D, texID);
+            GL.Uniform1(mainTexID, texID);
+        }
 
         //1st attribute buffer: vertices
         GL.EnableVertexAttribArray(0);  //attribute 0
@@ -136,6 +149,18 @@ public class Mesh
             3,
             VertexAttribPointerType.Float,
             true,
+            0,
+            0
+        );
+
+        //3rd attribute buffer: texcoord
+        GL.EnableVertexAttribArray(2);
+        GL.BindBuffer(BufferTarget.ArrayBuffer, texBuffer);
+        GL.VertexAttribPointer(
+            2,                      //layout(location = 2)
+            2,
+            VertexAttribPointerType.Float,
+            false,
             0,
             0
         );
