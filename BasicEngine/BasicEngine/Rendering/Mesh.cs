@@ -9,6 +9,8 @@ using System.Drawing.Imaging;
 
 public class Mesh
 {
+    //TODO: NOT A STRUCT TO COMBINE VERTEX, NORMAL & UV
+    //TODO: VERTEX AS VEC4
     public ObjVertex[] Vertices
     {
         get { return vertices; }
@@ -65,7 +67,6 @@ public class Mesh
         GL.GenVertexArrays(1, out vertexArrayID);
         GL.BindVertexArray(vertexArrayID);
 
-        //Creating our MVP Matrix --> TODO: Camera Class?
         matrixID = Shader.GetUniformLocation("mvpMatrix");   //Get the Handle for our uniform in our shader
         mID = Shader.GetUniformLocation("M");
         vID = Shader.GetUniformLocation("V");
@@ -124,7 +125,7 @@ public class Mesh
 
         if (Texture != null)
         {
-            GL.ActiveTexture(TextureUnit.Texture1);
+            GL.ActiveTexture(TextureUnit.Texture0 + texID);
             GL.BindTexture(TextureTarget.Texture2D, texID);
             GL.Uniform1(mainTexID, texID);
         }

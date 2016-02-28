@@ -56,23 +56,23 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\IGameObject.cs" />
+    <Compile Include="Rendering\Light.cs" />
     <Compile Include="Rendering\Model.cs" />
     <Compile Include="Rendering\Mesh.cs" />
     <Compile Include="Rendering\Shader.cs" />
+    <Compile Include="Transform\Transform.cs" />
+    <Compile Include="Utility\Matrices.cs" />
     <Compile Include="Utility\MeshLoader.cs" />
     <Compile Include="Utility\ShaderLoader.cs" />
+    <Compile Include="Utility\Time.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ModelFiles\bear.obj" />
     <None Include="ModelFiles\cube.obj" />
     <None Include="ModelFiles\plant.obj" />
-    <None Include="ModelFiles\Songoku.obj" />
     <None Include="ModelFiles\suzanne.obj" />
-    <None Include="ModelFiles\teddy.mtl" />
     <None Include="ModelFiles\texcube.mtl" />
     <None Include="ModelFiles\texcube.obj" />
-    <None Include="ModelFiles\tower.obj" />
     <None Include="Shaders\fragmentDefault.glsl" />
     <None Include="Shaders\fragment.glsl" />
     <None Include="Shaders\vertexDefault.glsl" />
@@ -80,7 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ModelFiles\Cube.PNG" />
-    <Content Include="ModelFiles\ToonTeddy.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

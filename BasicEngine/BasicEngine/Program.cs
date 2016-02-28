@@ -6,6 +6,7 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 using OpenTK.Input;
+using BasicEngine.Utility;
 
 namespace StarterKit
 {
@@ -27,10 +28,12 @@ namespace StarterKit
             //TODO: Lookat Visual from Scherzer
             gameWindow.Load += LoadEvent;
             gameWindow.Resize += ResizeEvent;
-            gameWindow.UpdateFrame += UpdateEvent;
+            gameWindow.UpdateFrame += UpdateEvent; 
             gameWindow.RenderFrame += RenderEvent;
             gameWindow.Disposed += DisposeEvent;
             gameWindow.KeyDown += KeyDownEvent;
+
+            gameWindow.UpdateFrame += Time.UpdateEvent;
 
             gameWindow.KeyDown += BasicEngine.Input.Control.KeyDownEvent;
             gameWindow.KeyUp += BasicEngine.Input.Control.KeyUpEvent;
