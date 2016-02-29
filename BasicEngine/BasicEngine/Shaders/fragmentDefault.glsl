@@ -62,6 +62,7 @@ void main()
 {
 	vec3 texel = texture(MainTexture, uv).rgb;
 
+	//TODO: How to check if Texture is existant --> texel = (0,0,0) could also be the middle of the texture
 	color = (texel.x==0 && texel.y==0 && texel.z==0) ? calculateLighting(vCol) : calculateLighting(texel);
 		
 }

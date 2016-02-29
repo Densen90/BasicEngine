@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using OpenTK;
@@ -107,7 +108,9 @@ public class MeshLoader
             }
         }
 
-        mesh.Vertices = objVertices.ToArray();
+        mesh.Vertices = objVertices.Select(v=>v.Vertex).ToArray();
+        mesh.Normals = objVertices.Select(v => v.Normal).ToArray();
+        mesh.UVs = objVertices.Select(v => v.TexCoord).ToArray();
         mesh.Triangles = objTriangles.ToArray();
         mesh.Quads = objQuads.ToArray();
 

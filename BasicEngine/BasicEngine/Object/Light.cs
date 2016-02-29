@@ -1,4 +1,4 @@
-﻿namespace BasicEngine.Rendering
+﻿namespace BasicEngine.Object
 {
     public enum LightType
     {
@@ -8,6 +8,8 @@
 
     class Light
     {
+        //TODO: finish and set global light
         public LightType Type { get; set; }
+        public Transform Transform { get; set; }
     }
 }

@@ -11,26 +11,40 @@ public class Mesh
 {
     //TODO: NOT A STRUCT TO COMBINE VERTEX, NORMAL & UV
     //TODO: VERTEX AS VEC4
-    public ObjVertex[] Vertices
+    private Vector3[] vertices;
+    public Vector3[] Vertices
     {
         get { return vertices; }
         set { vertices = value; }
     }
-    ObjVertex[] vertices;
 
+    private Vector3[] normals;
+    public Vector3[] Normals
+    {
+        get { return normals; }
+        set { normals = value; }
+    }
+
+    private Vector2[] uvs;
+    public Vector2[] UVs
+    {
+        get { return uvs; }
+        set { uvs = value; }
+    }
+
+    private ObjTriangle[] triangles;
     public ObjTriangle[] Triangles
     {
         get { return triangles; }
         set { triangles = value; }
     }
-    ObjTriangle[] triangles;
 
+    private ObjQuad[] quads;
     public ObjQuad[] Quads
     {
         get { return quads; }
         set { quads = value; }
     }
-    ObjQuad[] quads;
 
     public Shader Shader{ get; set; }
 
@@ -74,22 +88,27 @@ public class Mesh
         lightPosID = Shader.GetUniformLocation("LightPosWorldspace");
         mainTexID = Shader.GetUniformLocation("MainTexture");
 
+        
+    }
+
+    private void Prepare()
+    {
         //generate 1 buffer, put resulting identifier in vertexBuffer
         GL.GenBuffers(1, out vertexBuffer);
         //The following command will talk about our 'vertexBuffer' buffer
         GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
         //Give the vertices to OpenGL
-        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Select(v=>v.Vertex).ToArray().Length * Vector3.SizeInBytes), vertices.Select(v => v.Vertex).ToArray(), BufferUsageHint.StaticDraw);
+        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Vector3.SizeInBytes), vertices, BufferUsageHint.StaticDraw);
 
         //same for vertex Normals
         GL.GenBuffers(1, out normalBuffer);
         GL.BindBuffer(BufferTarget.ArrayBuffer, normalBuffer);
-        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Select(v => v.Normal).ToArray().Length * Vector3.SizeInBytes), vertices.Select(v => v.Normal).ToArray(), BufferUsageHint.StaticDraw);
+        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(normals.Length * Vector3.SizeInBytes), normals, BufferUsageHint.StaticDraw);
 
         //same for TexCoords
         GL.GenBuffers(1, out texBuffer);
         GL.BindBuffer(BufferTarget.ArrayBuffer, texBuffer);
-        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Select(v => v.TexCoord).ToArray().Length * Vector3.SizeInBytes), vertices.Select(v => v.TexCoord).ToArray(), BufferUsageHint.StaticDraw);
+        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(uvs.Length * Vector3.SizeInBytes), uvs, BufferUsageHint.StaticDraw);
 
         //same for the indexed triangles
         GL.GenBuffers(1, out trianglesBufferId);
@@ -104,6 +123,7 @@ public class Mesh
 
     public void Render()
     {
+        Prepare();
         //Calculate MVP
         Matrix4 M = Matrix4.Identity;
         Matrix4 V = Camera.Instance.ViewMatrix;

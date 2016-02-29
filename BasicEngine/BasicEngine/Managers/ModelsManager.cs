@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BasicEngine.Rendering;
+using BasicEngine.Object;
 
 namespace BasicEngine.Managers
 {
@@ -14,7 +15,7 @@ namespace BasicEngine.Managers
             //Create the default Shader
             Utility.ShaderLoader.LoadFromString("DefaultShader", @"..\..\Shaders\vertexDefault.glsl", @"..\..\Shaders\fragmentDefault.glsl");
 
-            Model mod = new Model("texcube.obj");
+            Model mod = new Model("rabbit.obj");
             gameModelDic.Add("mod", mod);
         }
 

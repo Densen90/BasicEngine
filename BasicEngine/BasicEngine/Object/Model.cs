@@ -3,10 +3,9 @@ using BasicEngine.Input;
 using OpenTK.Input;
 using System.Collections.Generic;
 using OpenTK;
-using System.Linq;
-using BasicEngine.Utility;
+using BasicEngine.Rendering;
 
-namespace BasicEngine.Rendering
+namespace BasicEngine.Object
 {
     class Model : IGameObject, IDisposable
     {
@@ -16,14 +15,14 @@ namespace BasicEngine.Rendering
         public Model()
         {
             this.Mesh = new Mesh(@"..\..\ModelFiles\", "cube.obj");
-            this.Transform = new Transform(Mesh.Vertices.Select(v=>v.Vertex).ToArray());
+            this.Transform = new Transform(Mesh.Vertices);
             Console.WriteLine("Position: " + this.Transform.Position);
         }
 
         public Model(string modelFile)
         {
             this.Mesh = new Mesh(@"..\..\ModelFiles\", modelFile);
-            this.Transform = new Transform(Mesh.Vertices.Select(v => v.Vertex).ToArray());
+            this.Transform = new Transform(Mesh.Vertices);
             Console.WriteLine("Position: " + this.Transform.Position);
         }
 
@@ -40,8 +39,6 @@ namespace BasicEngine.Rendering
 
         public void Update()
         {
-            //this.Transform.Translate(new Vector3(0, 0, 1 * Time.DeltaTime) out Mesh.Vertices);
-
             List<Key> pressedKeys = Control.GetAllPressedKeys();
             float moveSpeed = 0.015f;
             // ovverride in subclass

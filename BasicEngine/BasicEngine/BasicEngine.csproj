@@ -50,17 +50,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Input\Control.cs" />
+    <Compile Include="Object\Behaviour.cs" />
     <Compile Include="Rendering\Camera.cs" />
     <Compile Include="Managers\ModelsManager.cs" />
     <Compile Include="Managers\ShaderManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\IGameObject.cs" />
-    <Compile Include="Rendering\Light.cs" />
-    <Compile Include="Rendering\Model.cs" />
+    <Compile Include="Object\Light.cs" />
+    <Compile Include="Object\Model.cs" />
     <Compile Include="Rendering\Mesh.cs" />
     <Compile Include="Rendering\Shader.cs" />
-    <Compile Include="Transform\Transform.cs" />
+    <Compile Include="Object\Transform.cs" />
     <Compile Include="Utility\Matrices.cs" />
     <Compile Include="Utility\MeshLoader.cs" />
     <Compile Include="Utility\ShaderLoader.cs" />
@@ -70,6 +71,9 @@
     <None Include="App.config" />
     <None Include="ModelFiles\cube.obj" />
     <None Include="ModelFiles\plant.obj" />
+    <None Include="ModelFiles\Rabbit.mtl" />
+    <None Include="ModelFiles\Rabbit.obj" />
+    <None Include="ModelFiles\Rabbit_D.tga" />
     <None Include="ModelFiles\suzanne.obj" />
     <None Include="ModelFiles\texcube.mtl" />
     <None Include="ModelFiles\texcube.obj" />
@@ -81,6 +85,7 @@
   <ItemGroup>
     <Content Include="ModelFiles\Cube.PNG" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
