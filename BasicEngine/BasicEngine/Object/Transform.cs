@@ -5,9 +5,29 @@ namespace BasicEngine.Object
 {
     class Transform
     {
-        public Vector3 Position { get; set; }
-
         private Vector3[] vertices;
+
+        private Vector3 position;
+        public Vector3 Position
+        {
+            get
+            {
+                return position;
+            }
+                
+            set
+            {
+                Vector3 dist = value - position;
+                Translate(dist);
+                position = value;
+            }
+        }
+
+        public Transform()
+        {
+            position = Vector3.Zero;
+            this.vertices = new Vector3[0];
+        }
 
         public Transform(Vector3[] vertices)
         {
@@ -43,7 +63,7 @@ namespace BasicEngine.Object
             float yMed = vertices.Sum(s => s.Y) / vertices.Length;
             float zMed = vertices.Sum(s => s.Z) / vertices.Length;
 
-            Position = new Vector3(xMed, yMed, zMed);
+            position = new Vector3(xMed, yMed, zMed);
         }
     }
 }

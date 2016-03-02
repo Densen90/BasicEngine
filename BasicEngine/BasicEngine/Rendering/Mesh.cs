@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL;
 using BasicEngine.Rendering;
 using System.Drawing;
 using System.Drawing.Imaging;
+using BasicEngine.Object;
 
 public class Mesh
 {
@@ -130,9 +131,6 @@ public class Mesh
         Matrix4 MV = M * V;
         MVP = MV * Camera.Instance.ProjectionMatrix;
 
-        //TODO: do in seperate class
-        Vector3 lightPos = new Vector3(-3, 3, 5);
-
         //Use the shader
         Shader.Begin();
 
@@ -141,7 +139,7 @@ public class Mesh
         GL.UniformMatrix4(mID, false, ref M);
         GL.UniformMatrix4(vID, false, ref V);
         GL.UniformMatrix4(mvID, false, ref MV);
-        GL.Uniform3(lightPosID, ref lightPos);
+        GL.Uniform3(lightPosID, Light.Instance.Transform.Position);
 
         if (Texture != null)
         {

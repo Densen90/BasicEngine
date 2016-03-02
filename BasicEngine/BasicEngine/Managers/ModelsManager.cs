@@ -7,16 +7,16 @@ namespace BasicEngine.Managers
 {
     class ModelsManager : IDisposable
     {
-        private Dictionary<string, IGameObject> gameModelDic = null;
+        private Dictionary<int, IGameObject> gameModelDic = null;
 
         public ModelsManager()
         {
-            if (gameModelDic == null) gameModelDic = new Dictionary<string, IGameObject>();
+            if (gameModelDic == null) gameModelDic = new Dictionary<int, IGameObject>();
             //Create the default Shader
             Utility.ShaderLoader.LoadFromString("DefaultShader", @"..\..\Shaders\vertexDefault.glsl", @"..\..\Shaders\fragmentDefault.glsl");
 
             Model mod = new Model("rabbit.obj");
-            gameModelDic.Add("mod", mod);
+            gameModelDic.Add(mod.InstanceID, mod);
         }
 
         public void Dispose()
@@ -45,29 +45,41 @@ namespace BasicEngine.Managers
             }
         }
 
-        public void DeleteModel(string modelName)
+        public void AddModel(int id, IGameObject model)
         {
-            if(gameModelDic.ContainsKey(modelName))
+            if (gameModelDic.ContainsKey(id))
             {
-                IGameObject model = gameModelDic[modelName];
-                model.Dispose();
-                gameModelDic.Remove(modelName);
+                Console.WriteLine("ModelsManager.AddModel: Model " + id + " does already exist.");
             }
             else
             {
-                Console.WriteLine("ModelsManager.DeleteModel: Model " + modelName + " does not exist.");
+                gameModelDic.Add(id, model);
             }
         }
 
-        IGameObject GetModel(string modelName)
+        public void DeleteModel(int id)
         {
-            if (gameModelDic.ContainsKey(modelName))
+            if(gameModelDic.ContainsKey(id))
             {
-                return gameModelDic[modelName];
+                IGameObject model = gameModelDic[id];
+                model.Dispose();
+                gameModelDic.Remove(id);
             }
             else
             {
-                Console.WriteLine("ModelsManager.GetModel: Model " + modelName + " does not exist.");
+                Console.WriteLine("ModelsManager.DeleteModel: Model " + id + " does not exist.");
+            }
+        }
+
+        IGameObject GetModel(int id)
+        {
+            if (gameModelDic.ContainsKey(id))
+            {
+                return gameModelDic[id];
+            }
+            else
+            {
+                Console.WriteLine("ModelsManager.GetModel: Model " + id + " does not exist.");
                 return null;
             }
         }

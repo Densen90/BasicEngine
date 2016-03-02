@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BasicEngine.Rendering
+namespace BasicEngine.Object
 {
     interface IGameObject : IDisposable
     {

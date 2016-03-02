@@ -1,9 +1,9 @@
 ﻿using System;
-using BasicEngine.Input;
+using BasicEngine.Rendering;
 using OpenTK.Input;
+using BasicEngine.Input;
 using System.Collections.Generic;
 using OpenTK;
-using BasicEngine.Rendering;
 
 namespace BasicEngine.Object
 {
@@ -12,18 +12,25 @@ namespace BasicEngine.Object
         public Transform Transform { get; set; }
         public Mesh Mesh{ get; set; }
 
+        public int InstanceID { get; private set; }
+
         public Model()
         {
-            this.Mesh = new Mesh(@"..\..\ModelFiles\", "cube.obj");
-            this.Transform = new Transform(Mesh.Vertices);
-            Console.WriteLine("Position: " + this.Transform.Position);
+            Init("cube.obj");
         }
 
         public Model(string modelFile)
         {
+            Init(modelFile);
+        }
+
+        private void Init(string modelFile)
+        {
             this.Mesh = new Mesh(@"..\..\ModelFiles\", modelFile);
             this.Transform = new Transform(Mesh.Vertices);
-            Console.WriteLine("Position: " + this.Transform.Position);
+
+            InstanceID = this.GetHashCode();
+            Console.WriteLine("Position: " + this.Transform.Position + ", InstanceID: " + InstanceID);
         }
 
         public void Dispose()
@@ -33,7 +40,6 @@ namespace BasicEngine.Object
 
         public void Draw()
         {
-            // ovverride in subclass
             Mesh.Render();
         }
 
@@ -41,8 +47,8 @@ namespace BasicEngine.Object
         {
             List<Key> pressedKeys = Control.GetAllPressedKeys();
             float moveSpeed = 0.015f;
-            // ovverride in subclass
-            if(pressedKeys.Count>0)
+
+            if (pressedKeys.Count > 0)
             {
                 float horizAngle = 0f, vertAngle = 0f;
                 Vector3 move = new Vector3();
@@ -50,12 +56,12 @@ namespace BasicEngine.Object
                 if (pressedKeys.Contains(Key.Right)) horizAngle -= moveSpeed;
                 if (pressedKeys.Contains(Key.Up)) vertAngle += moveSpeed;
                 if (pressedKeys.Contains(Key.Down)) vertAngle -= moveSpeed;
-                if (pressedKeys.Contains(Key.A)) move.X -= moveSpeed*4f;
-                if (pressedKeys.Contains(Key.D)) move.X += moveSpeed*4f;
-                if (pressedKeys.Contains(Key.W)) move.Y += moveSpeed*4f;
-                if (pressedKeys.Contains(Key.S)) move.Y -= moveSpeed*4f;
-                if (pressedKeys.Contains(Key.Q)) move.Z += moveSpeed*4f;
-                if (pressedKeys.Contains(Key.E)) move.Z -= moveSpeed*4f;
+                if (pressedKeys.Contains(Key.A)) move.X -= moveSpeed * 4f;
+                if (pressedKeys.Contains(Key.D)) move.X += moveSpeed * 4f;
+                if (pressedKeys.Contains(Key.W)) move.Y += moveSpeed * 4f;
+                if (pressedKeys.Contains(Key.S)) move.Y -= moveSpeed * 4f;
+                if (pressedKeys.Contains(Key.Q)) move.Z += moveSpeed * 4f;
+                if (pressedKeys.Contains(Key.E)) move.Z -= moveSpeed * 4f;
 
                 Camera.Instance.CalculateMatrices(horizAngle, vertAngle, move);
             }

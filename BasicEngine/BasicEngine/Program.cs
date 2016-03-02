@@ -25,7 +25,6 @@ namespace StarterKit
         {
             gameWindow = new GameWindow(1024, 768);
 
-            //TODO: Lookat Visual from Scherzer
             gameWindow.Load += LoadEvent;
             gameWindow.Resize += ResizeEvent;
             gameWindow.UpdateFrame += UpdateEvent; 
