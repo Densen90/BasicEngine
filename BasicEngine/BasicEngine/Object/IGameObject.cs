@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BasicEngine.Object
 {
-    interface IGameObject : IDisposable
+    public interface IGameObject : IDisposable
     {
         void Draw();
         void Update();

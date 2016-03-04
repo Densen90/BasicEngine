@@ -49,11 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework.cs" />
     <Compile Include="Input\Control.cs" />
     <Compile Include="Rendering\Camera.cs" />
     <Compile Include="Managers\ModelsManager.cs" />
     <Compile Include="Managers\ShaderManager.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Object\IGameObject.cs" />
     <Compile Include="Object\Light.cs" />
