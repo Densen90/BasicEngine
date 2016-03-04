@@ -7,6 +7,18 @@ using System.Drawing;
 
 namespace BasicEngine
 {
+    public class FrameworkException : Exception
+    {
+        public string Type { get; set; }
+        public string Message { get; set; }
+
+        public FrameworkException(string type, string msg)
+        {
+            Type = type;
+            Message = msg;
+        }
+    }
+
     public class Framework
     {
         private static Framework instance = null;
@@ -40,14 +52,11 @@ namespace BasicEngine
             set { gameWindow.VSync = value; }
         }
 
-        [STAThread]
-        static void Main()
-        {
-            instance = new Framework();
-        }
-
         public Framework()
         {
+            if (instance != null) throw new FrameworkException("Create Error", "There is already an instance of the framework running!");
+
+            instance = this;
             gameWindow = new GameWindow(1024, 768);
 
             gameWindow.Load += LoadEvent;
