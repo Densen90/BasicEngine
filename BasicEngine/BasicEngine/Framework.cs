@@ -52,6 +52,11 @@ namespace BasicEngine
             set { gameWindow.VSync = value; }
         }
 
+        [STAThread]
+        static void Main()
+        {
+        }
+
         public Framework()
         {
             if (instance != null) throw new FrameworkException("Create Error", "There is already an instance of the framework running!");
