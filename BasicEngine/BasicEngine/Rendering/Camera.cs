@@ -26,10 +26,11 @@ namespace BasicEngine.Rendering
             Aspect = 4f / 3f;
             NearPlane = 0.1f;
             FarPlane = 1000f;
-            Position = new Vector3(0, 0, 5);
+            Position = new Vector3(0, 1, 5);
             Direction = Vector3.Zero;
 
-            CalculateMatrices(0, 0, Vector3.Zero);
+            viewMatrix = Matrix4.LookAt(Position, Vector3.Zero, new Vector3(0, 1, 0));
+            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(FOV, Aspect, NearPlane, FarPlane);
         }
 
         //Creating the ProjectionMatrix for transformation from camera to homogenous space
@@ -57,6 +58,8 @@ namespace BasicEngine.Rendering
         public Vector3 Position{ get; set; }
 
         public Vector3 Direction{ get; set; }
+
+        public Vector3 LookAt { get; set; }
 
         public void CalculateMatrices(float horizTurn, float vertTurn, Vector3 move)
         {

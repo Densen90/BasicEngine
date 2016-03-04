@@ -19,7 +19,6 @@ namespace BasicEngine.Object
             {
                 Vector3 dist = value - position;
                 Translate(dist);
-                position = value;
             }
         }
 
@@ -49,7 +48,7 @@ namespace BasicEngine.Object
                 //vertices[i] = new Vector3(t.X, t.Y, t.Z);
             }
 
-            CalculatePosition();
+            position = vertices.Length>0 ? CalculatePosition() : position+dir;
         }
 
         public void Scale(Vector3 scale)
@@ -57,13 +56,13 @@ namespace BasicEngine.Object
 
         }
 
-        private void CalculatePosition()
+        private Vector3 CalculatePosition()
         {
             float xMed = vertices.Sum(s => s.X) / vertices.Length;
             float yMed = vertices.Sum(s => s.Y) / vertices.Length;
             float zMed = vertices.Sum(s => s.Z) / vertices.Length;
 
-            position = new Vector3(xMed, yMed, zMed);
+            return new Vector3(xMed, yMed, zMed);
         }
     }
 }

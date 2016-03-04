@@ -4,6 +4,7 @@ using OpenTK.Input;
 using BasicEngine.Input;
 using System.Collections.Generic;
 using OpenTK;
+using BasicEngine.Utility;
 
 namespace BasicEngine.Object
 {
@@ -45,26 +46,28 @@ namespace BasicEngine.Object
 
         public void Update()
         {
-            List<Key> pressedKeys = Control.GetAllPressedKeys();
-            float moveSpeed = 0.015f;
+            //List<Key> pressedKeys = Control.GetAllPressedKeys();
+            //float moveSpeed = 0.015f;
 
-            if (pressedKeys.Count > 0)
-            {
-                float horizAngle = 0f, vertAngle = 0f;
-                Vector3 move = new Vector3();
-                if (pressedKeys.Contains(Key.Left)) horizAngle += moveSpeed;
-                if (pressedKeys.Contains(Key.Right)) horizAngle -= moveSpeed;
-                if (pressedKeys.Contains(Key.Up)) vertAngle += moveSpeed;
-                if (pressedKeys.Contains(Key.Down)) vertAngle -= moveSpeed;
-                if (pressedKeys.Contains(Key.A)) move.X -= moveSpeed * 4f;
-                if (pressedKeys.Contains(Key.D)) move.X += moveSpeed * 4f;
-                if (pressedKeys.Contains(Key.W)) move.Y += moveSpeed * 4f;
-                if (pressedKeys.Contains(Key.S)) move.Y -= moveSpeed * 4f;
-                if (pressedKeys.Contains(Key.Q)) move.Z += moveSpeed * 4f;
-                if (pressedKeys.Contains(Key.E)) move.Z -= moveSpeed * 4f;
+            //if (pressedKeys.Count > 0)
+            //{
+            //    float horizAngle = 0f, vertAngle = 0f;
+            //    Vector3 move = new Vector3();
+            //    if (pressedKeys.Contains(Key.Left)) horizAngle += moveSpeed;
+            //    if (pressedKeys.Contains(Key.Right)) horizAngle -= moveSpeed;
+            //    if (pressedKeys.Contains(Key.Up)) vertAngle += moveSpeed;
+            //    if (pressedKeys.Contains(Key.Down)) vertAngle -= moveSpeed;
+            //    if (pressedKeys.Contains(Key.A)) move.X -= moveSpeed * 4f;
+            //    if (pressedKeys.Contains(Key.D)) move.X += moveSpeed * 4f;
+            //    if (pressedKeys.Contains(Key.W)) move.Y += moveSpeed * 4f;
+            //    if (pressedKeys.Contains(Key.S)) move.Y -= moveSpeed * 4f;
+            //    if (pressedKeys.Contains(Key.Q)) move.Z += moveSpeed * 4f;
+            //    if (pressedKeys.Contains(Key.E)) move.Z -= moveSpeed * 4f;
 
-                Camera.Instance.CalculateMatrices(horizAngle, vertAngle, move);
-            }
+            //    Camera.Instance.CalculateMatrices(horizAngle, vertAngle, move);
+            //}
+
+            //Light.Instance.Transform.Position += new Vector3(0,0,-1)*Time.DeltaTime;
         }
     }
 }

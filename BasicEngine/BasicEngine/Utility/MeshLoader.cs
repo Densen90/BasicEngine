@@ -35,6 +35,7 @@ public class MeshLoader
     static List<Mesh.ObjVertex> objVertices;
     static List<Mesh.ObjTriangle> objTriangles;
     static List<Mesh.ObjQuad> objQuads;
+    static List<Bitmap> textures;
 
     static void Load(Mesh mesh, TextReader textReader)
     {
@@ -45,6 +46,7 @@ public class MeshLoader
         objVertices = new List<Mesh.ObjVertex>();
         objTriangles = new List<Mesh.ObjTriangle>();
         objQuads = new List<Mesh.ObjQuad>();
+        textures = new List<Bitmap>();
 
         string line;
         while ((line = textReader.ReadLine()) != null)
@@ -102,8 +104,7 @@ public class MeshLoader
                     }
                     break;
                 case "mtllib":
-                    //TODO: Only One Texture Loading now --> make more
-                    mesh.Texture = LoadMtl(parameters[1].Replace(",", "."));
+                    textures.Add( LoadMtl(parameters[1].Replace(",", ".")) );
                     break;
             }
         }
@@ -113,6 +114,7 @@ public class MeshLoader
         mesh.UVs = objVertices.Select(v => v.TexCoord).ToArray();
         mesh.Triangles = objTriangles.ToArray();
         mesh.Quads = objQuads.ToArray();
+        mesh.Textures = textures.ToArray();
 
         Console.WriteLine("Finished Loading ObjectFile"  + Environment.NewLine + 
             mesh.Vertices.Length + " Vertices, " + mesh.Triangles.Length + " Triangles, " + mesh.Quads.Length + " Quads" + Environment.NewLine + 

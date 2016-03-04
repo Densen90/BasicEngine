@@ -10,7 +10,6 @@ using BasicEngine.Object;
 
 public class Mesh
 {
-    //TODO: NOT A STRUCT TO COMBINE VERTEX, NORMAL & UV
     //TODO: VERTEX AS VEC4
     private Vector3[] vertices;
     public Vector3[] Vertices
@@ -47,9 +46,14 @@ public class Mesh
         set { quads = value; }
     }
 
-    public Shader Shader{ get; set; }
+    private Bitmap[] textures;
+    public Bitmap[] Textures
+    {
+        get { return textures; }
+        set { textures = value; }
+    }
 
-    public Bitmap Texture;
+    public Shader Shader{ get; set; }
 
     private int vertexArrayID;  //VAO
     private int vertexBuffer;
@@ -67,10 +71,11 @@ public class Mesh
     {
         MeshLoader.Load(this, path, fileName);
 
-        if(Texture!=null)
+        //TODO: Only One Texture Loading now --> make more
+        if (textures.Length>0)
         {
             Console.WriteLine("Found Texture in Mesh, Generating ID");
-            LoadImage(Texture);
+            LoadImage(textures[0]);
         }
 
         Shader = BasicEngine.Managers.ShaderManager.GetShader("DefaultShader");
@@ -141,7 +146,8 @@ public class Mesh
         GL.UniformMatrix4(mvID, false, ref MV);
         GL.Uniform3(lightPosID, Light.Instance.Transform.Position);
 
-        if (Texture != null)
+        //TODO: Only One Texture Loading now --> make more
+        if (textures.Length > 0)
         {
             GL.ActiveTexture(TextureUnit.Texture0 + texID);
             GL.BindTexture(TextureTarget.Texture2D, texID);
