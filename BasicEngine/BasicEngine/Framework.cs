@@ -55,6 +55,7 @@ namespace BasicEngine
         [STAThread]
         static void Main()
         {
+            //Framework f = new Framework();
         }
 
         public Framework()

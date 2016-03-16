@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{893ED65A-AFE0-4910-8BE6-95E4F50F8B70}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BasicEngine</RootNamespace>
     <AssemblyName>BasicEngine</AssemblyName>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -51,6 +54,8 @@
   <ItemGroup>
     <Compile Include="Framework.cs" />
     <Compile Include="Input\Control.cs" />
+    <Compile Include="Managers\Scene.cs" />
+    <Compile Include="Object\Behaviour.cs" />
     <Compile Include="Rendering\Camera.cs" />
     <Compile Include="Managers\ModelsManager.cs" />
     <Compile Include="Managers\ShaderManager.cs" />
@@ -61,6 +66,7 @@
     <Compile Include="Rendering\Mesh.cs" />
     <Compile Include="Rendering\Shader.cs" />
     <Compile Include="Object\Transform.cs" />
+    <Compile Include="Utility\EventDispatcher.cs" />
     <Compile Include="Utility\Matrices.cs" />
     <Compile Include="Utility\MeshLoader.cs" />
     <Compile Include="Utility\ShaderLoader.cs" />

@@ -32,6 +32,8 @@ namespace BasicEngine.Object
 
             InstanceID = this.GetHashCode();
             Console.WriteLine("Position: " + this.Transform.Position + ", InstanceID: " + InstanceID);
+
+            EventDispatcher.AddListener("Render", Draw);
         }
 
         public void Dispose()
